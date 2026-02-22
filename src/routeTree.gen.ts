@@ -18,7 +18,11 @@ import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
 import { Route as StaffLayoutIndexRouteImport } from './routes/staff/_layout/index'
 import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout/index'
 import { Route as StaffLayoutStockRouteImport } from './routes/staff/_layout/stock'
+import { Route as StaffLayoutProfileRouteImport } from './routes/staff/_layout/profile'
+import { Route as StaffLayoutGudangRouteImport } from './routes/staff/_layout/gudang'
 import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
+import { Route as AdminLayoutSettingsRouteImport } from './routes/admin/_layout/settings'
+import { Route as AdminLayoutProfileRouteImport } from './routes/admin/_layout/profile'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -65,9 +69,29 @@ const StaffLayoutStockRoute = StaffLayoutStockRouteImport.update({
   path: '/stock',
   getParentRoute: () => StaffLayoutRoute,
 } as any)
+const StaffLayoutProfileRoute = StaffLayoutProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => StaffLayoutRoute,
+} as any)
+const StaffLayoutGudangRoute = StaffLayoutGudangRouteImport.update({
+  id: '/gudang',
+  path: '/gudang',
+  getParentRoute: () => StaffLayoutRoute,
+} as any)
 const AdminLayoutUsersRoute = AdminLayoutUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminLayoutRoute,
+} as any)
+const AdminLayoutSettingsRoute = AdminLayoutSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminLayoutRoute,
+} as any)
+const AdminLayoutProfileRoute = AdminLayoutProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
 
@@ -78,7 +102,11 @@ export interface FileRoutesByFullPath {
   '/staff': typeof StaffLayoutRouteWithChildren
   '/staff/login': typeof StaffLoginRoute
   '/staff/register': typeof StaffRegisterRoute
+  '/admin/profile': typeof AdminLayoutProfileRoute
+  '/admin/settings': typeof AdminLayoutSettingsRoute
   '/admin/users': typeof AdminLayoutUsersRoute
+  '/staff/gudang': typeof StaffLayoutGudangRoute
+  '/staff/profile': typeof StaffLayoutProfileRoute
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin/': typeof AdminLayoutIndexRoute
   '/staff/': typeof StaffLayoutIndexRoute
@@ -88,7 +116,11 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/staff/login': typeof StaffLoginRoute
   '/staff/register': typeof StaffRegisterRoute
+  '/admin/profile': typeof AdminLayoutProfileRoute
+  '/admin/settings': typeof AdminLayoutSettingsRoute
   '/admin/users': typeof AdminLayoutUsersRoute
+  '/staff/gudang': typeof StaffLayoutGudangRoute
+  '/staff/profile': typeof StaffLayoutProfileRoute
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin': typeof AdminLayoutIndexRoute
   '/staff': typeof StaffLayoutIndexRoute
@@ -101,7 +133,11 @@ export interface FileRoutesById {
   '/staff/_layout': typeof StaffLayoutRouteWithChildren
   '/staff/login': typeof StaffLoginRoute
   '/staff/register': typeof StaffRegisterRoute
+  '/admin/_layout/profile': typeof AdminLayoutProfileRoute
+  '/admin/_layout/settings': typeof AdminLayoutSettingsRoute
   '/admin/_layout/users': typeof AdminLayoutUsersRoute
+  '/staff/_layout/gudang': typeof StaffLayoutGudangRoute
+  '/staff/_layout/profile': typeof StaffLayoutProfileRoute
   '/staff/_layout/stock': typeof StaffLayoutStockRoute
   '/admin/_layout/': typeof AdminLayoutIndexRoute
   '/staff/_layout/': typeof StaffLayoutIndexRoute
@@ -115,7 +151,11 @@ export interface FileRouteTypes {
     | '/staff'
     | '/staff/login'
     | '/staff/register'
+    | '/admin/profile'
+    | '/admin/settings'
     | '/admin/users'
+    | '/staff/gudang'
+    | '/staff/profile'
     | '/staff/stock'
     | '/admin/'
     | '/staff/'
@@ -125,7 +165,11 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/staff/login'
     | '/staff/register'
+    | '/admin/profile'
+    | '/admin/settings'
     | '/admin/users'
+    | '/staff/gudang'
+    | '/staff/profile'
     | '/staff/stock'
     | '/admin'
     | '/staff'
@@ -137,7 +181,11 @@ export interface FileRouteTypes {
     | '/staff/_layout'
     | '/staff/login'
     | '/staff/register'
+    | '/admin/_layout/profile'
+    | '/admin/_layout/settings'
     | '/admin/_layout/users'
+    | '/staff/_layout/gudang'
+    | '/staff/_layout/profile'
     | '/staff/_layout/stock'
     | '/admin/_layout/'
     | '/staff/_layout/'
@@ -217,6 +265,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffLayoutStockRouteImport
       parentRoute: typeof StaffLayoutRoute
     }
+    '/staff/_layout/profile': {
+      id: '/staff/_layout/profile'
+      path: '/profile'
+      fullPath: '/staff/profile'
+      preLoaderRoute: typeof StaffLayoutProfileRouteImport
+      parentRoute: typeof StaffLayoutRoute
+    }
+    '/staff/_layout/gudang': {
+      id: '/staff/_layout/gudang'
+      path: '/gudang'
+      fullPath: '/staff/gudang'
+      preLoaderRoute: typeof StaffLayoutGudangRouteImport
+      parentRoute: typeof StaffLayoutRoute
+    }
     '/admin/_layout/users': {
       id: '/admin/_layout/users'
       path: '/users'
@@ -224,15 +286,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutUsersRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/settings': {
+      id: '/admin/_layout/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminLayoutSettingsRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/profile': {
+      id: '/admin/_layout/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminLayoutProfileRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
   }
 }
 
 interface AdminLayoutRouteChildren {
+  AdminLayoutProfileRoute: typeof AdminLayoutProfileRoute
+  AdminLayoutSettingsRoute: typeof AdminLayoutSettingsRoute
   AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
+  AdminLayoutProfileRoute: AdminLayoutProfileRoute,
+  AdminLayoutSettingsRoute: AdminLayoutSettingsRoute,
   AdminLayoutUsersRoute: AdminLayoutUsersRoute,
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,
 }
@@ -242,11 +322,15 @@ const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
 )
 
 interface StaffLayoutRouteChildren {
+  StaffLayoutGudangRoute: typeof StaffLayoutGudangRoute
+  StaffLayoutProfileRoute: typeof StaffLayoutProfileRoute
   StaffLayoutStockRoute: typeof StaffLayoutStockRoute
   StaffLayoutIndexRoute: typeof StaffLayoutIndexRoute
 }
 
 const StaffLayoutRouteChildren: StaffLayoutRouteChildren = {
+  StaffLayoutGudangRoute: StaffLayoutGudangRoute,
+  StaffLayoutProfileRoute: StaffLayoutProfileRoute,
   StaffLayoutStockRoute: StaffLayoutStockRoute,
   StaffLayoutIndexRoute: StaffLayoutIndexRoute,
 }

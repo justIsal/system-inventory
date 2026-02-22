@@ -10,3 +10,14 @@ export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
 }
+
+export interface UserProfileResponse {
+    user_id: number;
+    username: string;
+    role: 'admin' | 'staff_gudang';
+    warehouse_id: number | null;
+    warehouse: {
+        name: string;
+        location?: string;
+    } | null;
+}

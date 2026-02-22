@@ -9,11 +9,11 @@ export const useRegister = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const handleRegister = async (username: string, passwordRaw: string) => {
+    const handleRegister = async (username: string, passwordRaw: string, warehouse_id: number) => {
         setIsLoading(true);
         setError(null);
         try {
-            await register(username, passwordRaw);
+            await register(username, passwordRaw, warehouse_id);
             
             toast.success('Registrasi berhasil! Silakan login.');
             

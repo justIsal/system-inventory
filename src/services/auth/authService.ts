@@ -11,10 +11,11 @@ export const login = async (username: string, passwordRaw: string): Promise<Logi
     return response.data.data;
 };
 
-export const register = async (username: string, passwordRaw: string): Promise<LoginResponse> => {
+export const register = async (username: string, passwordRaw: string, warehouse_id: number): Promise<LoginResponse> => {
     const response = await apiClient.post<ApiResponse<LoginResponse>>(API_ROUTES.AUTH.REGISTER, {
         username,
         password: passwordRaw,
+        warehouse_id,
         role: 'staff_gudang'
     });
     return response.data.data;
