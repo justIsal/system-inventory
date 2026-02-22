@@ -35,7 +35,6 @@ coverage/
 # TIDAK DI-PUSH: Konfigurasi lokal editor masing-masing developer
 .vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -43,3 +42,7 @@ coverage/
 *.njsproj
 *.sln
 *.sw?
+
+# === Framework Caches ===
+# TIDAK DI-PUSH: Folder temporary buatan TanStack Router
+.tanstack
