@@ -1,7 +1,22 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { isAuthenticated, logout, getUserRole, clearAuth } from '@/utils/auth';
 import { toast } from 'sonner';
-import { User, Settings, LayoutDashboard, Users, ShieldAlert, PackageSearch, Truck, Warehouse, UserCog, ShoppingBag, ClipboardCheck, ReceiptText, Navigation, ShieldCheck, FileBarChart } from 'lucide-react';
+import {
+  User,
+  Settings,
+  LayoutDashboard,
+  ShieldAlert,
+  PackageSearch,
+  Truck,
+  Warehouse,
+  UserCog,
+  ShoppingBag,
+  ClipboardCheck,
+  ReceiptText,
+  Navigation,
+  ShieldCheck,
+  FileBarChart,
+} from 'lucide-react';
 import { DashboardLayout } from '@/components/templates/DashboardLayout';
 
 export const Route = createFileRoute('/admin/_layout')({
@@ -23,88 +38,88 @@ export const Route = createFileRoute('/admin/_layout')({
 
 function AdminLayout() {
   const navigate = useNavigate();
-  
-const SIDEBAR_MENU = [
-  {
-    items: [
-      { 
-        name: 'Dashboard', 
-        path: '/admin', 
-        icon: <LayoutDashboard className="h-[18px] w-[18px]" /> 
-      }
-    ],
-  },
-  {
-    label: 'BASIS DATA MASTER',
-    items: [
-      {
-        name: 'Katalog Produk',
-        path: '/admin/katalog-produk',
-        icon: <PackageSearch className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Direktori Supplier',
-        path: '/admin/direktori-supplier',
-        icon: <Truck className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Manajemen Gudang',
-        path: '/admin/manajemen-gudang',
-        icon: <Warehouse className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Manajemen Pengguna',
-        path: '/admin/manajemen-pengguna',
-        icon: <UserCog className="h-[18px] w-[18px]" />,
-      },
-    ],
-  },
-  {
-    label: 'PENGADAAN BARANG',
-    items: [
-      {
-        name: 'Pesanan Pembelian',
-        path: '/admin/pesanan-pembelian',
-        icon: <ShoppingBag className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Kontrol Penerimaan',
-        path: '/admin/kontrol-penerimaan',
-        icon: <ClipboardCheck className="h-[18px] w-[18px]" />,
-      },
-    ],
-  },
-  {
-    label: 'DISTRIBUSI BARANG',
-    items: [
-      {
-        name: 'Pesanan Penjualan',
-        path: '/admin/pesanan-penjualan',
-        icon: <ReceiptText className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Pelacakan Kiriman',
-        path: '/admin/pelacakan-kiriman',
-        icon: <Navigation className="h-[18px] w-[18px]" />,
-      },
-    ],
-  },
-  {
-    label: 'KONTROL & AUDIT',
-    items: [
-      {
-        name: 'Pusat Persetujuan',
-        path: '/admin/pusat-persetujuan',
-        icon: <ShieldCheck className="h-[18px] w-[18px]" />,
-      },
-      {
-        name: 'Analitik & Laporan',
-        path: '/admin/analitik-laporan',
-        icon: <FileBarChart className="h-[18px] w-[18px]" />,
-      },
-    ],
-  },
-];
+
+  const SIDEBAR_MENU = [
+    {
+      items: [
+        {
+          name: 'Dashboard',
+          path: '/admin',
+          icon: <LayoutDashboard className="h-[18px] w-[18px]" />,
+        },
+      ],
+    },
+    {
+      label: 'BASIS DATA MASTER',
+      items: [
+        {
+          name: 'Katalog Produk',
+          path: '/admin/katalog-produk',
+          icon: <PackageSearch className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Direktori Supplier',
+          path: '/admin/direktori-supplier',
+          icon: <Truck className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Manajemen Gudang',
+          path: '/admin/manajemen-gudang',
+          icon: <Warehouse className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Manajemen Pengguna',
+          path: '/admin/manajemen-pengguna',
+          icon: <UserCog className="h-[18px] w-[18px]" />,
+        },
+      ],
+    },
+    {
+      label: 'PENGADAAN BARANG',
+      items: [
+        {
+          name: 'Pesanan Pembelian',
+          path: '/admin/pesanan-pembelian',
+          icon: <ShoppingBag className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Kontrol Penerimaan',
+          path: '/admin/kontrol-penerimaan',
+          icon: <ClipboardCheck className="h-[18px] w-[18px]" />,
+        },
+      ],
+    },
+    {
+      label: 'DISTRIBUSI BARANG',
+      items: [
+        {
+          name: 'Pesanan Penjualan',
+          path: '/admin/pesanan-penjualan',
+          icon: <ReceiptText className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Pelacakan Kiriman',
+          path: '/admin/pelacakan-kiriman',
+          icon: <Navigation className="h-[18px] w-[18px]" />,
+        },
+      ],
+    },
+    {
+      label: 'KONTROL & AUDIT',
+      items: [
+        {
+          name: 'Pusat Persetujuan',
+          path: '/admin/pusat-persetujuan',
+          icon: <ShieldCheck className="h-[18px] w-[18px]" />,
+        },
+        {
+          name: 'Analitik & Laporan',
+          path: '/admin/analitik-laporan',
+          icon: <FileBarChart className="h-[18px] w-[18px]" />,
+        },
+      ],
+    },
+  ];
 
   const handleLogout = async () => {
     await logout();

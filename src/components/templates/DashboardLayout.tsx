@@ -1,7 +1,6 @@
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { Link, Outlet } from '@tanstack/react-router';
 import {
-  ChevronDown,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -33,7 +32,7 @@ export interface DashboardLayoutProps {
   sidebarTitle: string;
   sidebarSubtitle?: string;
   sidebarMenu: SidebarMenuGroup[];
-  baseRoute: string; // for exact matching active state
+  baseRoute: string; 
   headerTitle: string;
   userInitials: string;
   userName: string;
@@ -54,7 +53,6 @@ export const DashboardLayout = ({
   sidebarMenu,
   baseRoute,
   headerTitle,
-  userInitials, // Kept for API compatibility, but user icon is now a generic icon as per design
   userName,
   userRole,
   dropdownItems,
