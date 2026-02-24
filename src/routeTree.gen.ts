@@ -23,6 +23,7 @@ import { Route as StaffLayoutGudangRouteImport } from './routes/staff/_layout/gu
 import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
 import { Route as AdminLayoutSettingsRouteImport } from './routes/admin/_layout/settings'
 import { Route as AdminLayoutProfileRouteImport } from './routes/admin/_layout/profile'
+import { Route as AdminLayoutKatalogProdukIndexRouteImport } from './routes/admin/_layout/katalog-produk/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -94,6 +95,12 @@ const AdminLayoutProfileRoute = AdminLayoutProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
+const AdminLayoutKatalogProdukIndexRoute =
+  AdminLayoutKatalogProdukIndexRouteImport.update({
+    id: '/katalog-produk/',
+    path: '/katalog-produk/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin/': typeof AdminLayoutIndexRoute
   '/staff/': typeof StaffLayoutIndexRoute
+  '/admin/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,6 +132,7 @@ export interface FileRoutesByTo {
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin': typeof AdminLayoutIndexRoute
   '/staff': typeof StaffLayoutIndexRoute
+  '/admin/katalog-produk': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,6 +150,7 @@ export interface FileRoutesById {
   '/staff/_layout/stock': typeof StaffLayoutStockRoute
   '/admin/_layout/': typeof AdminLayoutIndexRoute
   '/staff/_layout/': typeof StaffLayoutIndexRoute
+  '/admin/_layout/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/staff/stock'
     | '/admin/'
     | '/staff/'
+    | '/admin/katalog-produk/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/staff/stock'
     | '/admin'
     | '/staff'
+    | '/admin/katalog-produk'
   id:
     | '__root__'
     | '/'
@@ -189,6 +201,7 @@ export interface FileRouteTypes {
     | '/staff/_layout/stock'
     | '/admin/_layout/'
     | '/staff/_layout/'
+    | '/admin/_layout/katalog-produk/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutProfileRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/katalog-produk/': {
+      id: '/admin/_layout/katalog-produk/'
+      path: '/katalog-produk'
+      fullPath: '/admin/katalog-produk/'
+      preLoaderRoute: typeof AdminLayoutKatalogProdukIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
   }
 }
 
@@ -308,6 +328,7 @@ interface AdminLayoutRouteChildren {
   AdminLayoutSettingsRoute: typeof AdminLayoutSettingsRoute
   AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
+  AdminLayoutKatalogProdukIndexRoute: typeof AdminLayoutKatalogProdukIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
@@ -315,6 +336,7 @@ const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminLayoutSettingsRoute: AdminLayoutSettingsRoute,
   AdminLayoutUsersRoute: AdminLayoutUsersRoute,
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,
+  AdminLayoutKatalogProdukIndexRoute: AdminLayoutKatalogProdukIndexRoute,
 }
 
 const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
