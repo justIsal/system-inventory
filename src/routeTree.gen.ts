@@ -24,6 +24,8 @@ import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/use
 import { Route as AdminLayoutSettingsRouteImport } from './routes/admin/_layout/settings'
 import { Route as AdminLayoutProfileRouteImport } from './routes/admin/_layout/profile'
 import { Route as AdminLayoutKatalogProdukIndexRouteImport } from './routes/admin/_layout/katalog-produk/index'
+import { Route as AdminLayoutDirektoriSupplierIndexRouteImport } from './routes/admin/_layout/direktori-supplier/index'
+import { Route as AdminLayoutKatalogProdukProductIdRouteImport } from './routes/admin/_layout/katalog-produk/$productId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -101,6 +103,18 @@ const AdminLayoutKatalogProdukIndexRoute =
     path: '/katalog-produk/',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
+const AdminLayoutDirektoriSupplierIndexRoute =
+  AdminLayoutDirektoriSupplierIndexRouteImport.update({
+    id: '/direktori-supplier/',
+    path: '/direktori-supplier/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutKatalogProdukProductIdRoute =
+  AdminLayoutKatalogProdukProductIdRouteImport.update({
+    id: '/katalog-produk/$productId',
+    path: '/katalog-produk/$productId',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +131,8 @@ export interface FileRoutesByFullPath {
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin/': typeof AdminLayoutIndexRoute
   '/staff/': typeof StaffLayoutIndexRoute
+  '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRoutesByTo {
@@ -132,6 +148,8 @@ export interface FileRoutesByTo {
   '/staff/stock': typeof StaffLayoutStockRoute
   '/admin': typeof AdminLayoutIndexRoute
   '/staff': typeof StaffLayoutIndexRoute
+  '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/direktori-supplier': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRoutesById {
@@ -150,6 +168,8 @@ export interface FileRoutesById {
   '/staff/_layout/stock': typeof StaffLayoutStockRoute
   '/admin/_layout/': typeof AdminLayoutIndexRoute
   '/staff/_layout/': typeof StaffLayoutIndexRoute
+  '/admin/_layout/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/_layout/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/_layout/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
 }
 export interface FileRouteTypes {
@@ -169,6 +189,8 @@ export interface FileRouteTypes {
     | '/staff/stock'
     | '/admin/'
     | '/staff/'
+    | '/admin/katalog-produk/$productId'
+    | '/admin/direktori-supplier/'
     | '/admin/katalog-produk/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -184,6 +206,8 @@ export interface FileRouteTypes {
     | '/staff/stock'
     | '/admin'
     | '/staff'
+    | '/admin/katalog-produk/$productId'
+    | '/admin/direktori-supplier'
     | '/admin/katalog-produk'
   id:
     | '__root__'
@@ -201,6 +225,8 @@ export interface FileRouteTypes {
     | '/staff/_layout/stock'
     | '/admin/_layout/'
     | '/staff/_layout/'
+    | '/admin/_layout/katalog-produk/$productId'
+    | '/admin/_layout/direktori-supplier/'
     | '/admin/_layout/katalog-produk/'
   fileRoutesById: FileRoutesById
 }
@@ -320,6 +346,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutKatalogProdukIndexRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/direktori-supplier/': {
+      id: '/admin/_layout/direktori-supplier/'
+      path: '/direktori-supplier'
+      fullPath: '/admin/direktori-supplier/'
+      preLoaderRoute: typeof AdminLayoutDirektoriSupplierIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/katalog-produk/$productId': {
+      id: '/admin/_layout/katalog-produk/$productId'
+      path: '/katalog-produk/$productId'
+      fullPath: '/admin/katalog-produk/$productId'
+      preLoaderRoute: typeof AdminLayoutKatalogProdukProductIdRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
   }
 }
 
@@ -328,6 +368,8 @@ interface AdminLayoutRouteChildren {
   AdminLayoutSettingsRoute: typeof AdminLayoutSettingsRoute
   AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
+  AdminLayoutKatalogProdukProductIdRoute: typeof AdminLayoutKatalogProdukProductIdRoute
+  AdminLayoutDirektoriSupplierIndexRoute: typeof AdminLayoutDirektoriSupplierIndexRoute
   AdminLayoutKatalogProdukIndexRoute: typeof AdminLayoutKatalogProdukIndexRoute
 }
 
@@ -336,6 +378,10 @@ const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminLayoutSettingsRoute: AdminLayoutSettingsRoute,
   AdminLayoutUsersRoute: AdminLayoutUsersRoute,
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,
+  AdminLayoutKatalogProdukProductIdRoute:
+    AdminLayoutKatalogProdukProductIdRoute,
+  AdminLayoutDirektoriSupplierIndexRoute:
+    AdminLayoutDirektoriSupplierIndexRoute,
   AdminLayoutKatalogProdukIndexRoute: AdminLayoutKatalogProdukIndexRoute,
 }
 

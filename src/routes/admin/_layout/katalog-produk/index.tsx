@@ -4,13 +4,15 @@ import { CatalogToolbar, type SortConfig } from '@/components/organisms/CatalogT
 import { DataTable, type ColumnDef } from '@/components/organisms/DataTable';
 import { Badge } from '@/components/atoms/Badge';
 import { productService } from '@/services/api/productService';
+import { categoryService, type Category } from '@/services/api/categoryService';
 import type { Product } from '@/types/product.types';
 import { formatRupiah } from '@/utils/format';
-import { MoreVertical, FolderPlus } from 'lucide-react';
+import { FolderPlus, Eye, Edit, Trash2, AlertCircle } from 'lucide-react';
 import { Modal } from '@/components/molecules/Modal';
+import { ActionDropdown } from '@/components/molecules/ActionDropdown';
 import { Alert } from '@/components/molecules/Alert';
 import { ProductForm } from '@/components/organisms/ProductForm';
-import { AlertCircle } from 'lucide-react';
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 
 export const Route = createFileRoute('/admin/_layout/katalog-produk/')({
   component: KatalogProdukPage,
@@ -21,9 +23,12 @@ function KatalogProdukPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // Pagination, Search & Sort State
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,8 +39,21 @@ function KatalogProdukPage() {
   const [filterConfig, setFilterConfig] = useState<{ category?: string; inStock?: boolean }>({});
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     fetchProducts();
   }, [currentPage, pageSize, searchQuery, sortConfig.key, sortConfig.order, filterConfig.category, filterConfig.inStock]);
+
+  const fetchCategories = async () => {
+    try {
+        const data = await categoryService.getAllCategories();
+        setCategories(data);
+    } catch (err) {
+        console.error('Failed to fetch categories:', err);
+    }
+  };
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -52,14 +70,17 @@ function KatalogProdukPage() {
       // Temporary client-side filtering while evaluating backend models
       let filteredData = response.data;
       if (filterConfig.category) {
-        filteredData = filteredData.filter(p => (p.category || 'Elektronik') === filterConfig.category);
+        filteredData = filteredData.filter(p => (p.category?.name || 'Elektronik') === filterConfig.category);
       }
       if (filterConfig.inStock) {
-        filteredData = filteredData.filter(p => (p.stock ?? 0) > 0);
+        filteredData = filteredData.filter(p => {
+            const totalStock = p.variants?.reduce((acc, v) => acc + (v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0), 0) || 0;
+            return totalStock > 0;
+        });
       }
 
       setProducts(filteredData);
-      setTotalPages(response.totalPages);
+      setTotalPages(response.totalPages ?? 1);
     } catch (error) {
       console.error('Failed to fetch products:', error);
     } finally {
@@ -100,16 +121,11 @@ function KatalogProdukPage() {
     }
   };
 
-  const handleCreateProduct = async (data: { sku: string; name: string; unit: string | null; min_stock: number; price_buy: number; }) => {
+  const handleCreateProduct = async (data: any) => {
     setIsSubmitting(true);
     setNotification(null);
     try {
-      // Backend schema nullable transform
-      const payload = {
-        ...data,
-        unit: data.unit ?? null
-      };
-      await productService.createProduct(payload as any); // using any here since the Omit<Product> forces unit to string | null but the form payload uses string | undefined. We safely cast it.
+      await productService.createProduct(data);
       setIsAddModalOpen(false);
       setNotification({ type: 'success', message: 'Produk berhasil ditambahkan ke katalog.' });
       setCurrentPage(1);
@@ -128,10 +144,40 @@ function KatalogProdukPage() {
     }
   };
 
+  const handleDeleteProduct = (product: Product) => {
+    setSelectedProducts([product]);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleUpdateProduct = async (data: any) => {
+    if (!editingProduct) return;
+    setIsSubmitting(true);
+    setNotification(null);
+    try {
+      console.log(data);
+      await productService.updateProduct(editingProduct.product_id.toString(), data);
+
+      setIsEditModalOpen(false);
+      setEditingProduct(null);
+      setNotification({ type: 'success', message: 'Produk berhasil diperbarui.' });
+      fetchProducts();
+      setTimeout(() => setNotification(null), 5000);
+    } catch (error: any) {
+      console.error('Failed to update product:', error);
+      setNotification({ 
+        type: 'error', 
+        message: error.response?.data?.message || 'Gagal memperbarui produk.' 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const columns: ColumnDef<Product>[] = [
     {
-      header: 'SKU',
-      accessorKey: 'sku',
+      header: 'SKU Induk/Varian',
+      accessorKey: 'product_id',
+      cell: (row) => row.has_variants ? `Multi (${row.variants?.length} Varian)` : (row.variants?.[0]?.sku || '-'),
       className: 'font-medium text-gray-900',
     },
     {
@@ -140,12 +186,17 @@ function KatalogProdukPage() {
     },
     {
       header: 'Kategori',
-      cell: (row) => row.category || 'Elektronik', // Fallback since backend doesn't have it yet
+      cell: (row) => row.category?.name || '-', 
     },
     {
       header: 'Stok Saat Ini',
       cell: (row) => {
-        const stockVal = row.stock ?? 0;
+        // Calculate total stock from all variants
+        const stockVal = row.variants?.reduce((acc, v) => {
+             const variantStock = v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0;
+             return acc + variantStock;
+        }, 0) || 0;
+        
         return (
           <Badge variant={stockVal > 0 ? 'success' : 'danger'}>
             {stockVal}
@@ -155,23 +206,42 @@ function KatalogProdukPage() {
       className: 'text-center'
     },
     {
-      header: 'Unit',
-      cell: (row) => row.unit || '-',
+      header: 'Unit Dasar',
+      cell: (row) => row.variants?.[0]?.unit || '-',
     },
     {
-      header: 'Harga Beli',
-      cell: (row) => formatRupiah(row.price_buy || 0),
+      header: 'Harga Beli Dasar',
+      cell: (row) => formatRupiah(row.variants?.[0]?.price_buy || 0),
     },
+    {
+      header: 'Harga Jual Dasar',
+      cell: (row) => formatRupiah(row.variants?.[0]?.price_sell || 0),
+    },
+    {
+      header: 'Aksi',
+      cell: (row) => (
+          <ActionDropdown 
+              items={[
+                  { label: 'View Detail', icon: <Eye size={16} />, onClick: () => window.location.href = `/admin/katalog-produk/${row.product_id}` },
+                  { label: 'Edit Produk', icon: <Edit size={16} />, onClick: () => { setEditingProduct(row); setIsEditModalOpen(true); } },
+                  { label: 'Hapus Produk', icon: <Trash2 size={16} />, variant: 'danger', onClick: () => handleDeleteProduct(row) }
+              ]}
+          />
+      ),
+      className: 'text-right'
+    }
   ];
 
   return (
     <div className="space-y-6 mx-auto pb-10">
       {/* Breadcrumb Area */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <span>Dashboard</span>
-        <span className="text-gray-300">/</span>
-        <span className="text-teal-500 font-medium">Katalog Produk</span>
-      </div>
+      <Breadcrumbs 
+        items={[
+            { label: 'Dashboard', path: '/admin' },
+            { label: 'Katalog Produk' }
+        ]} 
+        className="mb-8"
+      />
 
       {/* Global Toast Notification */}
       {notification && (
@@ -189,6 +259,7 @@ function KatalogProdukPage() {
       )}
 
       <CatalogToolbar
+        categories={categories}
         selectedCount={selectedProducts.length}
         onSearchChange={(val) => {
           setSearchQuery(val);
@@ -224,11 +295,6 @@ function KatalogProdukPage() {
              setCurrentPage(1);
            }
         }}
-        actions={() => (
-          <button className="p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-600">
-             <MoreVertical className="h-4 w-4" />
-          </button>
-        )}
       />
 
       {/* Add Product Modal */}
@@ -238,11 +304,31 @@ function KatalogProdukPage() {
         title="Tambah Produk Baru"
         icon={<FolderPlus className="h-5 w-5" />}
       >
-        <ProductForm 
-          onSubmit={handleCreateProduct} 
-          onCancel={() => setIsAddModalOpen(false)} 
-          isSubmitting={isSubmitting}
-        />
+        {isAddModalOpen && (
+          <ProductForm 
+            key="add-product-form"
+            onSubmit={handleCreateProduct} 
+            onCancel={() => setIsAddModalOpen(false)} 
+            isSubmitting={isSubmitting}
+          />
+        )}
+      </Modal>
+
+      {/* Edit Product Modal */}
+      <Modal 
+        isOpen={isEditModalOpen} 
+        onClose={() => { if (!isSubmitting) { setIsEditModalOpen(false); setEditingProduct(null); } }}
+        title="Edit Produk"
+        icon={<Edit className="h-5 w-5" />}
+      >
+        {editingProduct && (
+          <ProductForm 
+            initialData={editingProduct}
+            onSubmit={handleUpdateProduct} 
+            onCancel={() => { setIsEditModalOpen(false); setEditingProduct(null); }} 
+            isSubmitting={isSubmitting}
+          />
+        )}
       </Modal>
 
       {/* Delete Confirmation Modal */}

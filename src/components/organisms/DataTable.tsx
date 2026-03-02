@@ -68,8 +68,8 @@ export function DataTable<T>({
   const someSelected = selectedKeys.size > 0 && selectedKeys.size < data.length;
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-      <div className="overflow-x-auto flex-1">
+    <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 lg:overflow-visible overflow-x-auto flex flex-col">
+      <div className="lg:overflow-x-visible overflow-x-auto flex-1 min-w-[800px]">
         <table className="w-full text-sm text-left">
           <thead className="bg-[#e2e8f0]/60 text-gray-700 font-semibold border-b border-gray-200">
             <tr>

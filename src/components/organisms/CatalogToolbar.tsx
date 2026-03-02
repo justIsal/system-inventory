@@ -15,6 +15,7 @@ interface CatalogToolbarProps {
   currentSort?: SortConfig;
   onFilterChange: (filters: { category?: string; inStock?: boolean }) => void;
   currentFilters?: { category?: string; inStock?: boolean };
+  categories?: { id: number; name: string }[];
 }
 
 export const CatalogToolbar = ({
@@ -26,6 +27,7 @@ export const CatalogToolbar = ({
   currentSort,
   onFilterChange,
   currentFilters,
+  categories = [],
 }: CatalogToolbarProps) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -36,7 +38,8 @@ export const CatalogToolbar = ({
     { label: 'Nama (Z-A)', key: 'name', order: 'desc' as const },
     { label: 'Harga Terendah', key: 'price_buy', order: 'asc' as const },
     { label: 'Harga Tertinggi', key: 'price_buy', order: 'desc' as const },
-    { label: 'Stok Paling Sedikit', key: 'min_stock', order: 'asc' as const },
+    { label: 'Stok Terendah', key: 'min_stock', order: 'asc' as const },
+    { label: 'Stok Tertinggi', key: 'min_stock', order: 'desc' as const },
   ];
 
   return (
@@ -82,8 +85,9 @@ export const CatalogToolbar = ({
                 onChange={(e) => onFilterChange({ ...currentFilters, category: e.target.value || undefined })}
               >
                 <option value="">Semua Kategori</option>
-                <option value="Elektronik">Elektronik</option>
-                <option value="Aksesoris">Aksesoris</option>
+                {categories.map((cat) => (
+                   <option key={cat.id} value={cat.name}>{cat.name}</option>
+                ))}
               </select>
             </div>
 

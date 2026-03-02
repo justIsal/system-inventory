@@ -132,7 +132,7 @@ export const DashboardLayout = ({
   return (
     <div className={`flex min-h-screen ${currentTheme.wrapperBg}`}>
       <aside
-        className={`${isSidebarCollapsed ? 'w-20' : 'w-64'} flex flex-col shadow-xl z-20 text-white transition-all duration-300 ease-in-out ${currentTheme.sidebarBg}`}
+        className={`${isSidebarCollapsed ? 'w-20' : 'w-64'} flex flex-col shadow-xl z-20 text-white transition-all duration-300 ease-in-out print:hidden ${currentTheme.sidebarBg}`}
       >
         <div
           className={`h-[73px] flex items-center justify-between border-b ${currentTheme.sidebarBorder} ${isSidebarCollapsed ? 'px-0 justify-center' : 'px-6 py-4'}`}
@@ -205,9 +205,9 @@ export const DashboardLayout = ({
       </aside>
 
       <main
-        className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 ${currentTheme.wrapperBg}`}
+        className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 print:h-auto print:overflow-visible ${currentTheme.wrapperBg}`}
       >
-        <header className="bg-white shadow-sm border-b border-gray-200 px-8 h-[73px] flex justify-between items-center relative z-10">
+        <header className="bg-white shadow-sm border-b border-gray-200 px-8 h-[73px] flex justify-between items-center relative z-10 print:hidden">
           <h1 className="text-xl font-semibold text-gray-800">{headerTitle}</h1>
 
           <div className="flex items-center gap-3">
@@ -376,7 +376,7 @@ export const DashboardLayout = ({
           </div>
         </Modal>
 
-        <div className="flex-1 overflow-y-auto p-8 bg-slate-50">
+        <div className="flex-1 overflow-y-auto p-8 bg-slate-50 print:p-0 print:overflow-visible print:bg-white">
           <Outlet />
         </div>
       </main>

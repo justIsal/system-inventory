@@ -13,6 +13,37 @@ export const API_ROUTES = {
     PRODUCTS: {
         BASE: '/products',
         BY_ID: (id: number | string) => `/products/${id}`
+    },
+    CATEGORIES: {
+        BASE: '/categories',
+        BY_ID: (id: number | string) => `/categories/${id}`
+    },
+    SUPPLIERS: {
+        BASE: '/suppliers',
+        BY_ID: (id: number | string) => `/suppliers/${id}`
+    },
+    WAREHOUSES: {
+        BASE: '/warehouses',
+        BY_ID: (id: number | string) => `/warehouses/${id}`
+    },
+    STOCKS: {
+        BASE: '/stocks',
+        BY_ID: (id: number | string) => `/stocks/${id}`
+    },
+    PURCHASE_ORDERS: {
+        BASE: '/purchase-orders',
+        BY_ID: (id: number | string) => `/purchase-orders/${id}`
+    },
+    SALES_ORDERS: {
+        BASE: '/sales-orders',
+        BY_ID: (id: number | string) => `/sales-orders/${id}`
+    },
+    STOCK_ADJUSTMENTS: {
+        BASE: '/stock-adjustments',
+        BY_ID: (id: number | string) => `/stock-adjustments/${id}`
+    },
+    STOCK_MOVEMENTS: {
+        BASE: '/stock-movements',
+        BY_ID: (id: number | string) => `/stock-movements/${id}`
     }
-    // Note: Other entities like Stock, Warehouses, PO, SO will follow the same pattern
 } as const;

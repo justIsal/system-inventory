@@ -11,15 +11,17 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, description, icon, children }) => {
-    return (
-        <div 
-            className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
-                isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-            }`}
-        >
+  return (
+    <div 
+        className={`fixed inset-0 z-[60] flex items-center justify-center transition-all duration-300 ${
+            isOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'
+        }`}
+    >
             {/* Backdrop */}
             <div 
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+                className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+                    isOpen ? 'opacity-100' : 'opacity-0'
+                }`}
             ></div>
 
             {/* Modal Box */}
