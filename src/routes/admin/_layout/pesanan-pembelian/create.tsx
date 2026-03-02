@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
-import { Button } from '@/components/atoms/Button';
+
 import { Alert } from '@/components/molecules/Alert';
 import { Modal } from '@/components/molecules/Modal';
 import { ProductForm } from '@/components/organisms/ProductForm';
@@ -325,7 +325,7 @@ function CreatePurchaseOrderPage() {
                   </div>
                   
                   <div className="p-6 space-y-4">
-                      {items.map((item, index) => (
+                      {items.map((item) => (
                           <div key={item.id} className="p-4 border border-slate-200 rounded-xl bg-slate-50 flex items-start gap-4">
                               
                               <div className="flex-1 space-y-2">

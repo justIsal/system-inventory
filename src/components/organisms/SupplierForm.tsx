@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from '@tanstack/react-form';
+import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
 import { Input } from '@/components/atoms/Input';
 import { ModalFormLayout } from '@/components/molecules/ModalFormLayout';
@@ -23,7 +24,7 @@ interface SupplierFormProps {
 }
 
 export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, isSubmitting }) => {
-  const form = useForm({
+  const form: any = useForm({
     defaultValues: {
       name: '',
       email: '',
@@ -33,13 +34,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
       npwp: '' as string | undefined,
       nok_rek: '' as string | undefined,
     },
+    validatorAdapter: zodValidator(),
     validators: {
-      onChange: supplierSchema,
+      onChange: supplierSchema as any,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value }: any) => {
       await onSubmit(value);
     }
-  });
+  } as any);
 
   return (
     <ModalFormLayout
@@ -60,7 +62,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="name"
                 validators={{ onChange: supplierSchema.shape.name }}
-                children={(field) => (
+                children={(field: any) => (
                   <div>
                     <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                       Nama Supplier <span className="text-red-500">*</span>
@@ -82,7 +84,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="email"
               validators={{ onChange: supplierSchema.shape.email }}
-              children={(field) => (
+              children={(field: any) => (
                 <div>
                   <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                     Email <span className="text-red-500">*</span>
@@ -104,7 +106,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="phone"
               validators={{ onChange: supplierSchema.shape.phone }}
-              children={(field) => (
+              children={(field: any) => (
                 <div>
                   <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                     Nomor Telepon
@@ -126,7 +128,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="contact_person"
                 validators={{ onChange: supplierSchema.shape.contact_person }}
-                children={(field) => (
+                children={(field: any) => (
                   <div>
                     <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                       Contact Person / Penanggung Jawab
@@ -149,7 +151,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="address"
                 validators={{ onChange: supplierSchema.shape.address }}
-                children={(field) => (
+                children={(field: any) => (
                   <div>
                     <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                       Alamat
@@ -176,7 +178,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="npwp"
               validators={{ onChange: supplierSchema.shape.npwp }}
-              children={(field) => (
+              children={(field: any) => (
                 <div>
                   <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                     NPWP
@@ -197,7 +199,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="nok_rek"
               validators={{ onChange: supplierSchema.shape.nok_rek }}
-              children={(field) => (
+              children={(field: any) => (
                 <div>
                   <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
                     Nomor Rekening

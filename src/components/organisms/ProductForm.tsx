@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
@@ -29,7 +29,7 @@ const productVariantSchema = z.object({
     min_stock: z.coerce.number().int().nonnegative().optional(),
     price_buy: z.coerce.number().nonnegative(),
     price_sell: z.coerce.number().nonnegative(),
-    specifications: z.record(z.any()).optional()
+    specifications: z.record(z.string(), z.any()).optional()
 });
 
 const productSchema = z.object({
@@ -105,10 +105,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
     };
 
     // Basic Form Setup with initial generic values
-    const form = useForm<any>({
+    const form: any = useForm({
         defaultValues: generateDefaultValues(),
         validatorAdapter: zodValidator() as any,
-        onSubmit: async ({ value }) => {
+        onSubmit: async ({ value }: any) => {
             // TanStack form doesn't automatically mutate the submitted payload with Zod coercions.
             // We must explicitly parse the raw form JSON through Zod to apply the string->number coercions
             // before sending it to the parent handler and API.
@@ -120,7 +120,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                 throw err;
             }
         },
-    });
+    } as any);
 
     const hasVariants = form.state.values.has_variants;
 
@@ -159,7 +159,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
     // API Data Data
     const [categories, setCategories] = useState<Category[]>([]);
     const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-    const [isFetchingDeps, setIsFetchingDeps] = useState(false);
     
     // Nested Modals
     const [isAddSupplierModalOpen, setIsAddSupplierModalOpen] = useState(false);
@@ -168,7 +167,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
 
     // Initialization Fetch
     useEffect(() => {
-        setIsFetchingDeps(true);
         Promise.all([
             apiClient.get(API_ROUTES.CATEGORIES.BASE),
             supplierService.getSuppliers(1, 100)
@@ -286,7 +284,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                         <div className="mb-4">
                             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Foto Produk</label>
                             <form.Field name="photo_url">
-                                {(field) => (
+                                {() => (
                                     <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 flex flex-col items-center justify-center text-slate-500 hover:bg-blue-50 transition-colors">
                                         <ImagePlus className="h-10 w-10 mb-2 text-slate-400" />
                                         <span className="text-sm font-bold">Upload fitur segera hadir</span>
@@ -297,7 +295,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
 
                         <div className="grid grid-cols-2 gap-4">
                             <form.Field name="name" validators={{ onChange: z.string().min(1) }}>
-                                {(field) => (
+                                {(field: any) => (
                                     <div className="col-span-2">
                                         <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Nama Produk *</label>
                                         <Input value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} placeholder="Misal: Kemeja Flanel Erigo" error={field.state.meta.errors ? field.state.meta.errors.map((err: any) => typeof err === 'string' ? err : err?.message || 'Wajib diisi').join(', ') : undefined} />
@@ -305,7 +303,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                 )}
                             </form.Field>
                             <form.Field name="category_id">
-                                {(field) => (
+                                {(field: any) => (
                                     <div>
                                         <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Kategori *</label>
                                         <select value={field.state.value || ''} onChange={(e) => field.handleChange(Number(e.target.value))} className="w-full p-2.5 text-sm border border-slate-300 rounded-lg outline-none max-h-10">
@@ -316,7 +314,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                 )}
                             </form.Field>
                             <form.Field name="brand">
-                                {(field) => (
+                                {(field: any) => (
                                     <div>
                                         <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Merek (Opsional)</label>
                                         <Input value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value)} placeholder="Misal: Erigo" />
@@ -324,7 +322,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                 )}
                             </form.Field>
                             <form.Field name="description">
-                                {(field) => (
+                                {(field: any) => (
                                     <div className="col-span-2">
                                         <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Deskripsi Produk</label>
                                         <textarea value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value)} rows={3} placeholder="Ceritakan detail produk..." className="w-full p-2.5 text-sm border border-slate-300 rounded-lg outline-none resize-none"></textarea>
@@ -339,7 +337,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                         <h3 className="text-sm font-bold text-slate-800 border-b pb-2">2. Pengaturan Operasional & Supplier</h3>
                         
                         <form.Field name="default_supplier_id">
-                            {(field) => (
+                            {(field: any) => (
                                 <div className="mb-4">
                                     <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Supplier Utama (Default PO)</label>
                                     <div className="flex gap-2">
@@ -355,7 +353,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
 
                         <div className="space-y-2">
                             <form.Field name="track_expiry">
-                                {(field) => (
+                                {(field: any) => (
                                     <label className="flex items-center space-x-3 cursor-pointer p-2 hover:bg-slate-50 rounded-lg">
                                         <input type="checkbox" checked={field.state.value} onChange={(e) => field.handleChange(e.target.checked)} className="w-4 h-4 text-blue-600 rounded" />
                                         <span className="text-sm font-semibold text-slate-700">Wajib Lacak Tanggal Kadaluarsa (Expired Date)</span>
@@ -363,7 +361,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                 )}
                             </form.Field>
                             <form.Field name="track_sn">
-                                {(field) => (
+                                {(field: any) => (
                                     <label className="flex items-center space-x-3 cursor-pointer p-2 hover:bg-slate-50 rounded-lg">
                                         <input type="checkbox" checked={field.state.value} onChange={(e) => field.handleChange(e.target.checked)} className="w-4 h-4 text-blue-600 rounded" />
                                         <span className="text-sm font-semibold text-slate-700">Wajib Scan Serial Number (SN/IMEI)</span>
@@ -374,7 +372,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
 
                         <div className="pt-2 border-t border-slate-100 mt-2">
                             <form.Field name="has_variants">
-                                {(field) => (
+                                {(field: any) => (
                                     <label className="flex items-center space-x-3 cursor-pointer p-3 bg-blue-50 border border-blue-100 rounded-lg">
                                         <input type="checkbox" checked={field.state.value} onChange={(e) => field.handleChange(e.target.checked)} className="w-5 h-5 text-blue-600 rounded" />
                                         <div>
@@ -393,7 +391,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                             <h3 className="text-sm font-bold text-slate-800 border-b pb-2">3. Detail SKU & Harga (Produk Tunggal)</h3>
                             <div className="grid grid-cols-3 gap-4">
                                 <form.Field name="variants[0].sku">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">SKU Utama *</label>
                                             <Input value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} placeholder="SKU-001" className="uppercase font-mono" />
@@ -401,7 +399,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].barcode">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Barcode / UPC</label>
                                             <Input value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value)} placeholder="899123..." font-mono />
@@ -409,7 +407,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].unit">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Satuan (UoM) *</label>
                                             <select value={field.state.value} onChange={(e) => field.handleChange(e.target.value)} className="w-full p-2.5 text-sm border border-slate-300 rounded-lg outline-none bg-white max-h-10">
@@ -419,7 +417,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].min_stock">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Min. Stok Alert</label>
                                             <Input type="number" value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value === '' ? undefined : Number(e.target.value))} placeholder="10" />
@@ -427,7 +425,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].price_buy">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Harga Beli Dasar</label>
                                             <Input type="number" value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value === '' ? 0 : Number(e.target.value))} placeholder="Rp" />
@@ -435,7 +433,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].price_sell">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Harga Jual Dasar</label>
                                             <Input type="number" value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value === '' ? 0 : Number(e.target.value))} placeholder="Rp" />
@@ -443,7 +441,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     )}
                                 </form.Field>
                                 <form.Field name="variants[0].weight_gram">
-                                    {(field) => (
+                                    {(field: any) => (
                                         <div>
                                             <label className="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Berat (Gram)</label>
                                             <Input type="number" value={field.state.value || ''} onChange={(e) => field.handleChange(e.target.value === '' ? undefined : Number(e.target.value))} placeholder="500" />
@@ -504,7 +502,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit,
                                     <label className="text-[10px] font-bold text-blue-600 uppercase mb-1 block">Satuan Dasar Varian (UoM) *</label>
                                     <select value={globalUnit} onChange={(e) => {
                                         setGlobalUnit(e.target.value);
-                                        const newVars = form.getFieldValue('variants').map(v => ({ ...v, unit: e.target.value }));
+                                        const newVars = form.getFieldValue('variants').map((v: any) => ({ ...v, unit: e.target.value }));
                                         form.setFieldValue('variants', newVars);
                                     }} className="w-1/3 p-2.5 text-sm border border-slate-300 rounded-lg outline-none bg-white">
                                         <option>Pcs</option><option>Box</option><option>Set</option><option>Kg</option><option>Gram</option>

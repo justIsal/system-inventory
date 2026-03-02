@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 export const Route = createFileRoute('/admin/_layout/direktori-supplier/')({
   component: RouteComponent,
@@ -15,13 +15,6 @@ interface VariantOption {
   id: number;
   name: string; // misal: "Warna"
   values: string; // misal: "Hitam, Putih"
-}
-
-interface GeneratedVariant {
-  combination: string;
-  sku: string;
-  price: number;
-  stock: number;
 }
 
 function RouteComponent() {
@@ -296,7 +289,7 @@ function RouteComponent() {
                     {generatedVariants.length === 0 ? (
                       <tr><td colSpan={7} className="p-4 text-center text-slate-400 text-xs italic">Ketik nilai varian di atas untuk menghasilkan daftar SKU otomatis...</td></tr>
                     ) : (
-                      generatedVariants.map((v, i) => (
+                      generatedVariants.map((v: any, i: number) => (
                         <tr key={i} className="hover:bg-slate-50 transition-colors">
                           <td className="p-3 font-bold text-slate-700">{v.combination}</td>
                           <td className="p-2"><input type="text" placeholder={`SKU-${i+1}`} className="w-full p-2 text-xs border border-slate-300 rounded outline-none uppercase font-mono focus:border-blue-500" /></td>
