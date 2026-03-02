@@ -31,13 +31,13 @@ function LandingPage() {
               </div>
               <div className="flex items-center gap-4">
                   <Link 
-                      to="/login" 
+                      to="/admin/login" 
                       className="px-6 py-2.5 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
                   >
                       Sign In
                   </Link>
                   <Link 
-                      to="/login" 
+                      to="/admin/login" 
                       className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hidden sm:block"
                   >
                       Masuk ke Sistem
@@ -72,7 +72,7 @@ function LandingPage() {
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Link 
-                      to="/login" 
+                      to="/admin/login" 
                       className="w-full sm:w-auto px-8 py-4 text-white bg-slate-900 hover:bg-slate-800 rounded-xl font-bold text-lg shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-1 flex items-center justify-center gap-2 group"
                   >
                       Mulai Sekarang 
@@ -243,7 +243,7 @@ function LandingPage() {
               <h2 className="text-3xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">Siap Merapikan Gudang Anda?</h2>
               <p className="text-lg text-slate-500 mb-10">Tinggalkan pencatatan manual berbasis kertas. Beralih ke SyncInventory sekarang juga.</p>
               <Link 
-                  to="/login" 
+                  to="/admin/login" 
                   className="inline-flex px-10 py-5 text-white bg-blue-600 hover:bg-blue-700 rounded-2xl font-black text-xl shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all hover:-translate-y-1 hover:shadow-[0_15px_50px_rgba(37,99,235,0.6)]"
               >
                   Masuk ke Portal Login
