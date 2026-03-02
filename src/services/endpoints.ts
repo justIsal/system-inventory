@@ -14,6 +14,10 @@ export const API_ROUTES = {
         BASE: '/products',
         BY_ID: (id: number | string) => `/products/${id}`
     },
+    PURCHASE_ORDERS: {
+        BASE: '/purchase-orders',
+        BY_ID: (id: number | string) => `/purchase-orders/${id}`
+    },
     CATEGORIES: {
         BASE: '/categories',
         BY_ID: (id: number | string) => `/categories/${id}`
@@ -30,10 +34,7 @@ export const API_ROUTES = {
         BASE: '/stocks',
         BY_ID: (id: number | string) => `/stocks/${id}`
     },
-    PURCHASE_ORDERS: {
-        BASE: '/purchase-orders',
-        BY_ID: (id: number | string) => `/purchase-orders/${id}`
-    },
+
     SALES_ORDERS: {
         BASE: '/sales-orders',
         BY_ID: (id: number | string) => `/sales-orders/${id}`

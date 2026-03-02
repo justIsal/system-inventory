@@ -23,8 +23,10 @@ import { Route as StaffLayoutGudangRouteImport } from './routes/staff/_layout/gu
 import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
 import { Route as AdminLayoutSettingsRouteImport } from './routes/admin/_layout/settings'
 import { Route as AdminLayoutProfileRouteImport } from './routes/admin/_layout/profile'
+import { Route as AdminLayoutPesananPembelianIndexRouteImport } from './routes/admin/_layout/pesanan-pembelian/index'
 import { Route as AdminLayoutKatalogProdukIndexRouteImport } from './routes/admin/_layout/katalog-produk/index'
 import { Route as AdminLayoutDirektoriSupplierIndexRouteImport } from './routes/admin/_layout/direktori-supplier/index'
+import { Route as AdminLayoutPesananPembelianCreateRouteImport } from './routes/admin/_layout/pesanan-pembelian/create'
 import { Route as AdminLayoutKatalogProdukProductIdRouteImport } from './routes/admin/_layout/katalog-produk/$productId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -97,6 +99,12 @@ const AdminLayoutProfileRoute = AdminLayoutProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
+const AdminLayoutPesananPembelianIndexRoute =
+  AdminLayoutPesananPembelianIndexRouteImport.update({
+    id: '/pesanan-pembelian/',
+    path: '/pesanan-pembelian/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
 const AdminLayoutKatalogProdukIndexRoute =
   AdminLayoutKatalogProdukIndexRouteImport.update({
     id: '/katalog-produk/',
@@ -107,6 +115,12 @@ const AdminLayoutDirektoriSupplierIndexRoute =
   AdminLayoutDirektoriSupplierIndexRouteImport.update({
     id: '/direktori-supplier/',
     path: '/direktori-supplier/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPembelianCreateRoute =
+  AdminLayoutPesananPembelianCreateRouteImport.update({
+    id: '/pesanan-pembelian/create',
+    path: '/pesanan-pembelian/create',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
 const AdminLayoutKatalogProdukProductIdRoute =
@@ -132,8 +146,10 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminLayoutIndexRoute
   '/staff/': typeof StaffLayoutIndexRoute
   '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
   '/admin/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/pesanan-pembelian/': typeof AdminLayoutPesananPembelianIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,8 +165,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminLayoutIndexRoute
   '/staff': typeof StaffLayoutIndexRoute
   '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
   '/admin/direktori-supplier': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/pesanan-pembelian': typeof AdminLayoutPesananPembelianIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,8 +187,10 @@ export interface FileRoutesById {
   '/admin/_layout/': typeof AdminLayoutIndexRoute
   '/staff/_layout/': typeof StaffLayoutIndexRoute
   '/admin/_layout/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
+  '/admin/_layout/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
   '/admin/_layout/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/_layout/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/_layout/pesanan-pembelian/': typeof AdminLayoutPesananPembelianIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -190,8 +210,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/staff/'
     | '/admin/katalog-produk/$productId'
+    | '/admin/pesanan-pembelian/create'
     | '/admin/direktori-supplier/'
     | '/admin/katalog-produk/'
+    | '/admin/pesanan-pembelian/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -207,8 +229,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/staff'
     | '/admin/katalog-produk/$productId'
+    | '/admin/pesanan-pembelian/create'
     | '/admin/direktori-supplier'
     | '/admin/katalog-produk'
+    | '/admin/pesanan-pembelian'
   id:
     | '__root__'
     | '/'
@@ -226,8 +250,10 @@ export interface FileRouteTypes {
     | '/admin/_layout/'
     | '/staff/_layout/'
     | '/admin/_layout/katalog-produk/$productId'
+    | '/admin/_layout/pesanan-pembelian/create'
     | '/admin/_layout/direktori-supplier/'
     | '/admin/_layout/katalog-produk/'
+    | '/admin/_layout/pesanan-pembelian/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -339,6 +365,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutProfileRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/pesanan-pembelian/': {
+      id: '/admin/_layout/pesanan-pembelian/'
+      path: '/pesanan-pembelian'
+      fullPath: '/admin/pesanan-pembelian/'
+      preLoaderRoute: typeof AdminLayoutPesananPembelianIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
     '/admin/_layout/katalog-produk/': {
       id: '/admin/_layout/katalog-produk/'
       path: '/katalog-produk'
@@ -351,6 +384,13 @@ declare module '@tanstack/react-router' {
       path: '/direktori-supplier'
       fullPath: '/admin/direktori-supplier/'
       preLoaderRoute: typeof AdminLayoutDirektoriSupplierIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pesanan-pembelian/create': {
+      id: '/admin/_layout/pesanan-pembelian/create'
+      path: '/pesanan-pembelian/create'
+      fullPath: '/admin/pesanan-pembelian/create'
+      preLoaderRoute: typeof AdminLayoutPesananPembelianCreateRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
     '/admin/_layout/katalog-produk/$productId': {
@@ -369,8 +409,10 @@ interface AdminLayoutRouteChildren {
   AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
   AdminLayoutKatalogProdukProductIdRoute: typeof AdminLayoutKatalogProdukProductIdRoute
+  AdminLayoutPesananPembelianCreateRoute: typeof AdminLayoutPesananPembelianCreateRoute
   AdminLayoutDirektoriSupplierIndexRoute: typeof AdminLayoutDirektoriSupplierIndexRoute
   AdminLayoutKatalogProdukIndexRoute: typeof AdminLayoutKatalogProdukIndexRoute
+  AdminLayoutPesananPembelianIndexRoute: typeof AdminLayoutPesananPembelianIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
@@ -380,9 +422,12 @@ const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,
   AdminLayoutKatalogProdukProductIdRoute:
     AdminLayoutKatalogProdukProductIdRoute,
+  AdminLayoutPesananPembelianCreateRoute:
+    AdminLayoutPesananPembelianCreateRoute,
   AdminLayoutDirektoriSupplierIndexRoute:
     AdminLayoutDirektoriSupplierIndexRoute,
   AdminLayoutKatalogProdukIndexRoute: AdminLayoutKatalogProdukIndexRoute,
+  AdminLayoutPesananPembelianIndexRoute: AdminLayoutPesananPembelianIndexRoute,
 }
 
 const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(

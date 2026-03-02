@@ -16,6 +16,7 @@ interface CatalogToolbarProps {
   onFilterChange: (filters: { category?: string; inStock?: boolean }) => void;
   currentFilters?: { category?: string; inStock?: boolean };
   categories?: { id: number; name: string }[];
+  addButtonLabel?: string;
 }
 
 export const CatalogToolbar = ({
@@ -28,6 +29,7 @@ export const CatalogToolbar = ({
   onFilterChange,
   currentFilters,
   categories = [],
+  addButtonLabel = 'Tambah Produk',
 }: CatalogToolbarProps) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -166,7 +168,7 @@ export const CatalogToolbar = ({
           onClick={onAddClick}
           className="flex items-center gap-2 px-4 py-2 bg-teal-700 text-white font-medium rounded-lg hover:bg-teal-800 transition-colors shadow-sm ml-2"
         >
-          <Plus className="h-4 w-4" /> Tambah Produk
+          <Plus className="h-4 w-4" /> {addButtonLabel}
         </button>
       </div>
     </div>
