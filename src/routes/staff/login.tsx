@@ -6,8 +6,8 @@ export const Route = createFileRoute('/staff/login')({
   beforeLoad: async () => {
     if (isAuthenticated()) {
       const role = getUserRole();
-      if (role === 'admin') throw redirect({ to: '/admin' as any });
-      if (role === 'staff_gudang') throw redirect({ to: '/staff' as any });
+      if (role === 'admin') throw redirect({ to: '/admin' as never });
+      if (role === 'staff_gudang') throw redirect({ to: '/staff' as never });
       clearAuth();
     } else {
       clearAuth();

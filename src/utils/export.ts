@@ -1,7 +1,7 @@
-export const exportToCSV = <T extends Record<string, any>>(
+export const exportToCSV = <T extends Record<string, unknown>>(
   data: T[],
   filename: string,
-  headers: { key: keyof T | ((item: T) => any); label: string }[]
+  headers: { key: keyof T | ((item: T) => unknown); label: string }[]
 ) => {
   if (!data || data.length === 0) {
     alert('Tidak ada data untuk diexport.');

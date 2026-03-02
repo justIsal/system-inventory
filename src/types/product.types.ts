@@ -48,7 +48,7 @@ export interface ProductVariant {
   min_stock: number;
   price_buy: number;
   price_sell: number;
-  specifications?: any;
+  specifications?: Record<string, string>;
   stocks?: Stock[];
   movements?: StockMovement[];
 }

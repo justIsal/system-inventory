@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { Link, Outlet } from '@tanstack/react-router';
-import {
-  LogOut,
-  ChevronLeft,
-  ChevronRight,
-  Bell,
-  User as UserIcon,
-} from 'lucide-react';
+import { LogOut, ChevronLeft, ChevronRight, Bell, User as UserIcon } from 'lucide-react';
 import { Modal } from '@/components/molecules/Modal';
 
 export interface SidebarMenuItem {
@@ -32,7 +26,7 @@ export interface DashboardLayoutProps {
   sidebarTitle: string;
   sidebarSubtitle?: string;
   sidebarMenu: SidebarMenuGroup[];
-  baseRoute: string; 
+  baseRoute: string;
   headerTitle: string;
   userInitials: string;
   userName: string;
@@ -179,7 +173,7 @@ export const DashboardLayout = ({
               {group.items.map((item) => (
                 <Link
                   key={item.path}
-                  to={item.path as any}
+                  to={item.path as never}
                   activeProps={{
                     className: `active font-semibold text-white ${currentTheme.linkActiveBg}`,
                   }}
@@ -299,7 +293,7 @@ export const DashboardLayout = ({
                     <div key={index}>
                       {item.path ? (
                         <Link
-                          to={item.path as any}
+                          to={item.path as never}
                           onClick={() => setIsDropdownOpen(false)}
                           className={`flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 transition-colors ${currentTheme.dropdownHover}`}
                         >

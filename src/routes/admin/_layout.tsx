@@ -27,7 +27,7 @@ export const Route = createFileRoute('/admin/_layout')({
     }
     const role = getUserRole();
     if (role === 'staff_gudang') {
-      throw redirect({ to: '/staff' as any });
+      throw redirect({ to: '/staff' as never });
     } else if (role !== 'admin') {
       clearAuth();
       throw redirect({ to: '/admin/login' });
@@ -124,7 +124,7 @@ function AdminLayout() {
   const handleLogout = async () => {
     await logout();
     toast.info('Berhasil logout dari Admin Portal');
-    navigate({ to: '/admin/login' as any });
+    navigate({ to: '/admin/login' as never });
   };
 
   return (

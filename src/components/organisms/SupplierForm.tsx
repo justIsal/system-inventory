@@ -24,7 +24,7 @@ interface SupplierFormProps {
 }
 
 export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, isSubmitting }) => {
-  const form: any = useForm({
+  const form = useForm({
     defaultValues: {
       name: '',
       email: '',
@@ -36,12 +36,13 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
     },
     validatorAdapter: zodValidator(),
     validators: {
-      onChange: supplierSchema as any,
+      // @ts-expect-error - Mismatched schema type
+      onChange: supplierSchema,
     },
-    onSubmit: async ({ value }: any) => {
+    onSubmit: async ({ value }) => {
       await onSubmit(value);
-    }
-  } as any);
+    },
+  });
 
   return (
     <ModalFormLayout
@@ -62,9 +63,12 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="name"
                 validators={{ onChange: supplierSchema.shape.name }}
-                children={(field: any) => (
+                children={(field) => (
                   <div>
-                    <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor={field.name}
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Nama Supplier <span className="text-red-500">*</span>
                     </label>
                     <Input
@@ -74,19 +78,29 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="Contoh: PT Sumber Rejeki"
-                      error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                      error={
+                        field.state.meta.errors?.length
+                          ? String(
+                              (field.state.meta.errors[0] as { message: string }).message ||
+                                field.state.meta.errors[0],
+                            )
+                          : undefined
+                      }
                     />
                   </div>
                 )}
               />
             </div>
-            
+
             <form.Field
               name="email"
               validators={{ onChange: supplierSchema.shape.email }}
-              children={(field: any) => (
+              children={(field) => (
                 <div>
-                  <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email <span className="text-red-500">*</span>
                   </label>
                   <Input
@@ -97,7 +111,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="kontak@perusahaan.com"
-                    error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                    error={
+                      field.state.meta.errors?.length
+                        ? String(
+                            (field.state.meta.errors[0] as { message: string }).message ||
+                              field.state.meta.errors[0],
+                          )
+                        : undefined
+                    }
                   />
                 </div>
               )}
@@ -106,9 +127,12 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="phone"
               validators={{ onChange: supplierSchema.shape.phone }}
-              children={(field: any) => (
+              children={(field) => (
                 <div>
-                  <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Nomor Telepon
                   </label>
                   <Input
@@ -118,7 +142,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="+62 812..."
-                    error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                    error={
+                      field.state.meta.errors?.length
+                        ? String(
+                            (field.state.meta.errors[0] as { message: string }).message ||
+                              field.state.meta.errors[0],
+                          )
+                        : undefined
+                    }
                   />
                 </div>
               )}
@@ -128,9 +159,12 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="contact_person"
                 validators={{ onChange: supplierSchema.shape.contact_person }}
-                children={(field: any) => (
+                children={(field) => (
                   <div>
-                    <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor={field.name}
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Contact Person / Penanggung Jawab
                     </label>
                     <Input
@@ -140,7 +174,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="Nama orang yang bisa dihubungi"
-                      error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                      error={
+                        field.state.meta.errors?.length
+                          ? String(
+                              (field.state.meta.errors[0] as { message: string }).message ||
+                                field.state.meta.errors[0],
+                            )
+                          : undefined
+                      }
                     />
                   </div>
                 )}
@@ -151,9 +192,12 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
               <form.Field
                 name="address"
                 validators={{ onChange: supplierSchema.shape.address }}
-                children={(field: any) => (
+                children={(field) => (
                   <div>
-                    <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor={field.name}
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Alamat
                     </label>
                     <Input
@@ -163,7 +207,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="Alamat lengkap perusahaan"
-                      error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                      error={
+                        field.state.meta.errors?.length
+                          ? String(
+                              (field.state.meta.errors[0] as { message: string }).message ||
+                                field.state.meta.errors[0],
+                            )
+                          : undefined
+                      }
                     />
                   </div>
                 )}
@@ -173,14 +224,17 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
         </div>
 
         <div>
-           <h3 className="text-sm font-bold text-gray-900 mb-3">Informasi Finansial & Pajak</h3>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h3 className="text-sm font-bold text-gray-900 mb-3">Informasi Finansial & Pajak</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <form.Field
               name="npwp"
               validators={{ onChange: supplierSchema.shape.npwp }}
-              children={(field: any) => (
+              children={(field) => (
                 <div>
-                  <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     NPWP
                   </label>
                   <Input
@@ -190,7 +244,14 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Nomor Pokok Wajib Pajak"
-                    error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                    error={
+                      field.state.meta.errors?.length
+                        ? String(
+                            (field.state.meta.errors[0] as { message: string }).message ||
+                              field.state.meta.errors[0],
+                          )
+                        : undefined
+                    }
                   />
                 </div>
               )}
@@ -199,9 +260,12 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
             <form.Field
               name="nok_rek"
               validators={{ onChange: supplierSchema.shape.nok_rek }}
-              children={(field: any) => (
+              children={(field) => (
                 <div>
-                  <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Nomor Rekening
                   </label>
                   <Input
@@ -211,12 +275,19 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ onSubmit, onCancel, 
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Nomor rekening bank"
-                    error={field.state.meta.errors?.length ? String((field.state.meta.errors[0] as any).message || field.state.meta.errors[0]) : undefined}
+                    error={
+                      field.state.meta.errors?.length
+                        ? String(
+                            (field.state.meta.errors[0] as { message: string }).message ||
+                              field.state.meta.errors[0],
+                          )
+                        : undefined
+                    }
                   />
                 </div>
               )}
             />
-           </div>
+          </div>
         </div>
       </div>
     </ModalFormLayout>

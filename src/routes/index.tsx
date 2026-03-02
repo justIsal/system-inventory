@@ -22,7 +22,7 @@ function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-slate-200/50">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                       <Layers className="w-6 h-6 text-white" />
                   </div>
                   <span className="text-xl font-black tracking-tight text-slate-800">
@@ -62,7 +62,7 @@ function LandingPage() {
               </div>
               <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.1] mb-8">
                   Kendali Penuh Atas <br/>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-600">
                       Rantai Pasok
                   </span> Anda.
               </h1>

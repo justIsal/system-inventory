@@ -20,14 +20,14 @@ export const Route = createFileRoute('/staff/_layout')({
   beforeLoad: async () => {
     if (!isAuthenticated()) {
       clearAuth();
-      throw redirect({ to: '/staff/login' as any });
+      throw redirect({ to: '/staff/login' as never });
     }
     const role = getUserRole();
     if (role === 'admin') {
-      throw redirect({ to: '/admin' as any });
+      throw redirect({ to: '/admin' as never });
     } else if (role !== 'staff_gudang') {
       clearAuth();
-      throw redirect({ to: '/staff/login' as any });
+      throw redirect({ to: '/staff/login' as never });
     }
   },
   component: StaffLayout,
@@ -96,7 +96,7 @@ function StaffLayout() {
   const handleLogout = async () => {
     await logout();
     toast.info('Berhasil logout dari Staff Portal');
-    navigate({ to: '/staff/login' as any });
+    navigate({ to: '/staff/login' as never });
   };
 
   return (
