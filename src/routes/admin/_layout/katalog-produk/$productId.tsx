@@ -157,7 +157,7 @@ function RouteComponent() {
           <div className="flex items-start gap-4">
             <Button
               onClick={handleBack}
-              className="!w-auto !p-2 !bg-white !text-slate-500 !border !border-slate-200 hover:!bg-slate-50 hover:!text-blue-600 shadow-sm mt-1"
+              className="w-auto! p-2! bg-white! text-slate-500! border! border-slate-200! hover:bg-slate-50! hover:text-blue-600! shadow-sm mt-1"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -181,13 +181,13 @@ function RouteComponent() {
           <div className="flex items-center gap-3">
             <Button
               onClick={() => setIsEditModalOpen(true)}
-              className="!w-auto flex items-center gap-2 !px-5 !py-2.5 !text-sm !font-bold !text-white !bg-blue-600 !rounded-lg !shadow-md shadow-blue-200 hover:!bg-blue-700 transition-all active:scale-95"
+              className="w-auto! flex items-center gap-2 px-5! py-2.5! text-sm! font-bold! text-white! bg-blue-600! rounded-lg! shadow-md! shadow-blue-200 hover:bg-blue-700! transition-all active:scale-95"
             >
               <Edit className="w-4 h-4" /> Edit Produk
             </Button>
             <Button
               onClick={handlePrintLabel}
-              className="!w-auto flex items-center gap-2 !px-5 !py-2.5 !text-sm !font-bold !text-slate-700 !bg-white border border-slate-300 !rounded-lg hover:!bg-slate-50 transition-all shadow-sm"
+              className="w-auto! flex items-center gap-2 px-5! py-2.5! text-sm! font-bold! text-slate-700! bg-white! border border-slate-300 rounded-lg! hover:bg-slate-50! transition-all shadow-sm"
             >
               <Printer className="w-4 h-4" /> Cetak Label
             </Button>
@@ -297,11 +297,11 @@ function RouteComponent() {
               <div className="flex items-center gap-3">
                 <Button
                   onClick={handleExportData}
-                  className="!w-auto flex items-center gap-2 !px-3 !py-1.5 !text-[13px] !font-semibold !text-blue-600 !bg-blue-50 hover:!bg-blue-100 !rounded-md transition-colors"
+                  className="w-auto! flex items-center gap-2 px-3! py-1.5! text-[13px]! font-semibold! text-blue-600! bg-blue-50! hover:bg-blue-100! rounded-md! transition-colors"
                 >
                   <Printer className="w-4 h-4" /> Export Data
                 </Button>
-                <Button className="!w-auto flex items-center gap-2 !px-3 !py-1.5 !text-[13px] !font-semibold !text-slate-600 !bg-slate-100 hover:!bg-slate-200 !rounded-md transition-colors">
+                <Button className="w-auto! flex items-center gap-2 px-3! py-1.5! text-[13px]! font-semibold! text-slate-600! bg-slate-100! hover:bg-slate-200! rounded-md! transition-colors">
                   <AlertCircle className="w-4 h-4" /> Filter
                 </Button>
               </div>

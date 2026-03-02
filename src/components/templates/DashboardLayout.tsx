@@ -182,7 +182,7 @@ export const DashboardLayout = ({
                   title={isSidebarCollapsed ? item.name : undefined}
                 >
                   <div
-                    className={`flex-shrink-0 p-2 rounded-md transition-colors group-[.active]:bg-white group-[.active]:text-[#1c2434]`}
+                    className={`shrink-0 p-2 rounded-md transition-colors group-[.active]:bg-white group-[.active]:text-[#1c2434]`}
                   >
                     {item.icon}
                   </div>

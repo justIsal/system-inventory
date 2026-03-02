@@ -84,7 +84,7 @@ export function ActionDropdown({ items }: ActionDropdownProps) {
                 // Position it to right-align with the button
                 left: coords.left + coords.width - 192, // 192px is w-48
             }}
-            className={`w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-[9999] transition-all duration-200 origin-top-right
+            className={`w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-9999 transition-all duration-200 origin-top-right
               ${isVisible ? 'transform opacity-100 scale-100 pointer-events-auto' : 'transform opacity-0 scale-95 pointer-events-none'}
             `}
           >

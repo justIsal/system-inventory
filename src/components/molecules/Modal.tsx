@@ -13,7 +13,7 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, description, icon, children }) => {
   return (
     <div 
-        className={`fixed inset-0 z-[60] flex items-center justify-center transition-all duration-300 ${
+        className={`fixed inset-0 z-60 flex items-center justify-center transition-all duration-300 ${
             isOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'
         }`}
     >
@@ -32,7 +32,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, descriptio
             >
                 {/* Header */}
                 {title && (
-                  <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white flex-shrink-0">
+                  <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white shrink-0">
                       <div className="flex items-center gap-3">
                           {icon && <div className="text-gray-900 flex items-center">{icon}</div>}
                           <div>

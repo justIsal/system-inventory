@@ -958,7 +958,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
       {/* Notifications and Sub-Modals below */}
       {nestedNotification && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-300 min-w-[300px] shadow-lg rounded-xl">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-100 animate-in slide-in-from-top-4 fade-in duration-300 min-w-[300px] shadow-lg rounded-xl">
           <Alert
             variant={nestedNotification.type}
             className="flex justify-between items-center shadow-lg"

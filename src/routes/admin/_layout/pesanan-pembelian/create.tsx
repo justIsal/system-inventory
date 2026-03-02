@@ -201,7 +201,7 @@ function CreatePurchaseOrderPage() {
     <div className="mx-auto pb-10 animate-in fade-in duration-500">
       {/* Toast */}
       {notification && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-300">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-100 animate-in slide-in-from-top-4 fade-in duration-300">
           <Alert variant={notification.type === 'error' ? 'destructive' : 'success'}>
             <div>{notification.message}</div>
           </Alert>
