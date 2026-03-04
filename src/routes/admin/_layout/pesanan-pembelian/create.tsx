@@ -594,27 +594,29 @@ function CreatePurchaseOrderPage() {
         title="Tambah Supplier Baru (Quick)"
       >
         <div className="p-6">
-          <SupplierForm
-            onSubmit={async (data) => {
-              try {
-                const newSupplier = await supplierService.createSupplier(data);
-                setSuppliers([newSupplier, ...suppliers]);
-                setSupplierId(newSupplier.supplier_id); // Auto select
-                setShowSupplierModal(false);
-                setNotification({
-                  type: 'success',
-                  message: 'Supplier baru berhasil ditambahkan.',
-                });
-              } catch (e: unknown) {
-                const err = e as { response?: { data?: { message?: string } } };
-                setNotification({
-                  type: 'error',
-                  message: err.response?.data?.message || 'Gagal menambah supplier.',
-                });
-              }
-            }}
-            onCancel={() => setShowSupplierModal(false)}
-          />
+          {showSupplierModal && (
+            <SupplierForm
+              onSubmit={async (data) => {
+                try {
+                  const newSupplier = await supplierService.createSupplier(data);
+                  setSuppliers([newSupplier, ...suppliers]);
+                  setSupplierId(newSupplier.supplier_id); // Auto select
+                  setShowSupplierModal(false);
+                  setNotification({
+                    type: 'success',
+                    message: 'Supplier baru berhasil ditambahkan.',
+                  });
+                } catch (e: unknown) {
+                  const err = e as { response?: { data?: { message?: string } } };
+                  setNotification({
+                    type: 'error',
+                    message: err.response?.data?.message || 'Gagal menambah supplier.',
+                  });
+                }
+              }}
+              onCancel={() => setShowSupplierModal(false)}
+            />
+          )}
         </div>
       </Modal>
 
@@ -625,26 +627,28 @@ function CreatePurchaseOrderPage() {
         title="Tambah Produk Baru (Quick)"
       >
         <div className="p-6 max-h-[70vh] overflow-y-auto">
-          <ProductForm
-            onSubmit={async (data) => {
-              try {
-                await productService.createProduct(data);
-                await fetchMasterData();
-                setShowProductModal(false);
-                setNotification({
-                  type: 'success',
-                  message: 'Produk & Varian berhasil ditambahkan. Silakan pilih di menu.',
-                });
-              } catch (e: unknown) {
-                const err = e as { response?: { data?: { message?: string } } };
-                setNotification({
-                  type: 'error',
-                  message: err.response?.data?.message || 'Gagal menambah produk.',
-                });
-              }
-            }}
-            onCancel={() => setShowProductModal(false)}
-          />
+          {showProductModal && (
+            <ProductForm
+              onSubmit={async (data) => {
+                try {
+                  await productService.createProduct(data);
+                  await fetchMasterData();
+                  setShowProductModal(false);
+                  setNotification({
+                    type: 'success',
+                    message: 'Produk & Varian berhasil ditambahkan. Silakan pilih di menu.',
+                  });
+                } catch (e: unknown) {
+                  const err = e as { response?: { data?: { message?: string } } };
+                  setNotification({
+                    type: 'error',
+                    message: err.response?.data?.message || 'Gagal menambah produk.',
+                  });
+                }
+              }}
+              onCancel={() => setShowProductModal(false)}
+            />
+          )}
         </div>
       </Modal>
     </div>

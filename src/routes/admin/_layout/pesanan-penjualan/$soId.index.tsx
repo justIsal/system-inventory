@@ -116,7 +116,7 @@ function SalesOrderDetailPage() {
         <div className="flex items-start gap-4">
           <button
             onClick={() => navigate({ to: '/admin/pesanan-penjualan' })}
-            className="p-2 border border-indigo-200 bg-white rounded-lg hover:bg-indigo-50 transition-colors text-indigo-600 focus:outline-none print:hidden flex-shrink-0 mt-1"
+            className="p-2 border border-indigo-200 bg-white rounded-lg hover:bg-indigo-50 transition-colors text-indigo-600 focus:outline-none print:hidden shrink-0 mt-1"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
