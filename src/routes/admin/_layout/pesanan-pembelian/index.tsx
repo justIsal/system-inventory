@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react';
 import { purchaseOrderService } from '@/services/api/purchaseOrderService';
 import type { PurchaseOrder } from '@/types/purchase-order.types';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
-import { CatalogToolbar } from '@/components/organisms/CatalogToolbar';
+import { CatalogToolbar, type SortConfig } from '@/components/organisms/CatalogToolbar';
 import { DataTable, type ColumnDef } from '@/components/organisms/DataTable';
 import { ActionDropdown } from '@/components/molecules/ActionDropdown';
 import { Alert } from '@/components/molecules/Alert';
+import { Modal } from '@/components/molecules/Modal';
 import { formatRupiah } from '@/utils/format';
+import { FileText, Edit, Trash2 } from 'lucide-react';
+
 export const Route = createFileRoute('/admin/_layout/pesanan-pembelian/')({
   component: PesananPembelianPage,
 });
@@ -18,7 +21,13 @@ function PesananPembelianPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [sortOption, setSortOption] = useState('');
+  const [sortConfig, setSortConfig] = useState<SortConfig>({
+    key: 'created_at',
+    order: 'desc',
+  });
+  const [selectedOrders, setSelectedOrders] = useState<PurchaseOrder[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -31,7 +40,7 @@ function PesananPembelianPage() {
   const fetchOrders = async () => {
     try {
       setIsLoading(true);
-      const data = await purchaseOrderService.getPurchaseOrders();
+      const data = await purchaseOrderService.getAllPurchaseOrders();
       setOrders(data);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
@@ -43,11 +52,41 @@ function PesananPembelianPage() {
 
   const handleSearch = (query: string) => setSearchQuery(query);
 
-  const handleFilter = (filters: Record<string, string>) => {
-    setStatusFilter(filters.status || '');
-  };
+  const poSortOptions = [
+    { label: 'Terbaru Ditambahkan', key: 'created_at', order: 'desc' as const },
+    { label: 'Terlama Ditambahkan', key: 'created_at', order: 'asc' as const },
+  ];
 
-  const handleSort = (option: string) => setSortOption(option);
+  const handleConfirmDelete = async () => {
+    if (selectedOrders.length === 0) return;
+    setIsSubmitting(true);
+    setNotification(null);
+    try {
+      const idsToDelete = selectedOrders.map((o) => o.po_id);
+      // Wait for backend support, currently mocked
+      // await purchaseOrderService.deletePurchaseOrders(idsToDelete);
+      console.log('Deleting POs:', idsToDelete);
+
+      setNotification({
+        type: 'success',
+        message: `${idsToDelete.length} Pesanan berhasil dihapus.`,
+      });
+      setSelectedOrders([]);
+      setIsDeleteModalOpen(false);
+      fetchOrders();
+      setTimeout(() => setNotification(null), 5000);
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      console.error('Failed to delete POs:', error);
+      setNotification({
+        type: 'error',
+        message: error.response?.data?.message || 'Terjadi kesalahan saat menghapus pesanan.',
+      });
+      setIsDeleteModalOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Filter & Sort Logic
   const filteredOrders = orders.filter((order) => {
@@ -70,15 +109,14 @@ function PesananPembelianPage() {
     return matchesSearch && matchesStatus;
   });
 
-  if (sortOption === 'terbaru') {
-    filteredOrders.sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    );
-  } else if (sortOption === 'terlama') {
-    filteredOrders.sort(
-      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-    );
-  }
+  filteredOrders.sort((a, b) => {
+    if (sortConfig.key === 'created_at') {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return sortConfig.order === 'asc' ? dateA - dateB : dateB - dateA;
+    }
+    return 0;
+  });
 
   const columns: ColumnDef<PurchaseOrder>[] = [
     {
@@ -138,6 +176,8 @@ function PesananPembelianPage() {
         if (row.status === 'OPEN') badgeColor = 'bg-blue-50 text-blue-700 border-blue-200';
         if (row.status === 'CANCELLED') badgeColor = 'bg-red-50 text-red-700 border-red-200';
         if (row.status === 'PARTIAL') badgeColor = 'bg-orange-50 text-orange-700 border-orange-200';
+        if (row.status === 'NEEDS_APPROVAL')
+          badgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
 
         return (
           <span
@@ -154,9 +194,33 @@ function PesananPembelianPage() {
       cell: (row) => (
         <ActionDropdown
           items={[
-            { label: 'Edit', onClick: () => console.log('Edit', row.po_id) },
-            { label: 'Print', onClick: () => console.log('Print', row.po_id) },
-            { label: 'Hapus', onClick: () => console.log('Delete', row.po_id), variant: 'danger' },
+            {
+              label: 'Detail',
+              icon: <FileText size={16} />,
+              onClick: () =>
+                navigate({
+                  to: '/admin/pesanan-pembelian/$poId',
+                  params: { poId: row.po_id.toString() },
+                }),
+            },
+            {
+              label: 'Edit',
+              icon: <Edit size={16} />,
+              onClick: () =>
+                navigate({
+                  to: '/admin/pesanan-pembelian/$poId/edit',
+                  params: { poId: row.po_id.toString() },
+                }),
+            },
+            {
+              label: 'Hapus',
+              icon: <Trash2 size={16} />,
+              onClick: () => {
+                setSelectedOrders([row]);
+                setIsDeleteModalOpen(true);
+              },
+              variant: 'danger',
+            },
           ]}
         />
       ),
@@ -186,12 +250,35 @@ function PesananPembelianPage() {
         <div className="flex-1 w-full">
           <CatalogToolbar
             onSearchChange={handleSearch}
-            onFilterChange={handleFilter as never}
-            onSortChange={handleSort as never}
-            selectedCount={0}
-            onDeleteSelected={() => console.log('Delete array')}
+            selectedCount={selectedOrders.length}
+            onDeleteSelected={() => setIsDeleteModalOpen(true)}
             onAddClick={() => navigate({ to: '/admin/pesanan-pembelian/create' as never })}
             addButtonLabel="Tambah Pesanan"
+            sortOptions={poSortOptions}
+            currentSort={sortConfig}
+            onSortChange={(sort) => setSortConfig(sort)}
+            filterTitle="Filter Pesanan"
+            filterContent={
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-gray-600 mb-2">
+                  Status Pesanan
+                </label>
+                <select
+                  className="w-full text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="">Semua Status</option>
+                  <option value="OPEN">OPEN</option>
+                  <option value="DRAFT">DRAFT</option>
+                  <option value="PARTIAL">PARTIAL</option>
+                  <option value="RECEIVED">RECEIVED</option>
+                  <option value="NEEDS_APPROVAL">NEEDS_APPROVAL</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                </select>
+              </div>
+            }
+            onResetFilter={() => setStatusFilter('')}
           />
         </div>
       </div>
@@ -203,9 +290,33 @@ function PesananPembelianPage() {
           data={filteredOrders}
           isLoading={isLoading}
           keyExtractor={(row) => row.po_id}
-          onRowSelectionChange={(selectedRows) => console.log('Selected POs:', selectedRows)}
+          onRowSelectionChange={(selected) => setSelectedOrders(selected)}
         />
       </div>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Konfirmasi Hapus"
+        description="Apakah Anda yakin ingin menghapus pesanan (PO) yang dipilih? Data yang sudah dihapus tidak dapat direstore."
+      >
+        <div className="flex justify-end gap-3 mt-6 p-2">
+          <button
+            onClick={() => setIsDeleteModalOpen(false)}
+            className="px-4 py-2 font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+            disabled={isSubmitting}
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleConfirmDelete}
+            disabled={isSubmitting}
+            className="px-4 py-2 font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+          >
+            {isSubmitting ? 'Menghapus...' : 'Ya, Hapus PO'}
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

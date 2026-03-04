@@ -23,11 +23,27 @@ import { Route as StaffLayoutGudangRouteImport } from './routes/staff/_layout/gu
 import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
 import { Route as AdminLayoutSettingsRouteImport } from './routes/admin/_layout/settings'
 import { Route as AdminLayoutProfileRouteImport } from './routes/admin/_layout/profile'
+import { Route as StaffLayoutNotifikasiIndexRouteImport } from './routes/staff/_layout/notifikasi/index'
+import { Route as StaffLayoutInboundIndexRouteImport } from './routes/staff/_layout/inbound/index'
+import { Route as AdminLayoutPusatPersetujuanIndexRouteImport } from './routes/admin/_layout/pusat-persetujuan/index'
+import { Route as AdminLayoutPesananPenjualanIndexRouteImport } from './routes/admin/_layout/pesanan-penjualan/index'
 import { Route as AdminLayoutPesananPembelianIndexRouteImport } from './routes/admin/_layout/pesanan-pembelian/index'
+import { Route as AdminLayoutPelacakanKirimanIndexRouteImport } from './routes/admin/_layout/pelacakan-kiriman/index'
+import { Route as AdminLayoutNotifikasiIndexRouteImport } from './routes/admin/_layout/notifikasi/index'
+import { Route as AdminLayoutManajemenPenggunaIndexRouteImport } from './routes/admin/_layout/manajemen-pengguna/index'
+import { Route as AdminLayoutManajemenGudangIndexRouteImport } from './routes/admin/_layout/manajemen-gudang/index'
+import { Route as AdminLayoutKontrolPenerimaanIndexRouteImport } from './routes/admin/_layout/kontrol-penerimaan/index'
 import { Route as AdminLayoutKatalogProdukIndexRouteImport } from './routes/admin/_layout/katalog-produk/index'
 import { Route as AdminLayoutDirektoriSupplierIndexRouteImport } from './routes/admin/_layout/direktori-supplier/index'
+import { Route as AdminLayoutAnalitikLaporanIndexRouteImport } from './routes/admin/_layout/analitik-laporan/index'
+import { Route as StaffLayoutInboundPoIdRouteImport } from './routes/staff/_layout/inbound/$poId'
+import { Route as AdminLayoutPesananPenjualanCreateRouteImport } from './routes/admin/_layout/pesanan-penjualan/create'
 import { Route as AdminLayoutPesananPembelianCreateRouteImport } from './routes/admin/_layout/pesanan-pembelian/create'
 import { Route as AdminLayoutKatalogProdukProductIdRouteImport } from './routes/admin/_layout/katalog-produk/$productId'
+import { Route as AdminLayoutPesananPenjualanSoIdIndexRouteImport } from './routes/admin/_layout/pesanan-penjualan/$soId.index'
+import { Route as AdminLayoutPesananPembelianPoIdIndexRouteImport } from './routes/admin/_layout/pesanan-pembelian/$poId.index'
+import { Route as AdminLayoutPesananPenjualanSoIdEditRouteImport } from './routes/admin/_layout/pesanan-penjualan/$soId.edit'
+import { Route as AdminLayoutPesananPembelianPoIdEditRouteImport } from './routes/admin/_layout/pesanan-pembelian/$poId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -99,10 +115,63 @@ const AdminLayoutProfileRoute = AdminLayoutProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
+const StaffLayoutNotifikasiIndexRoute =
+  StaffLayoutNotifikasiIndexRouteImport.update({
+    id: '/notifikasi/',
+    path: '/notifikasi/',
+    getParentRoute: () => StaffLayoutRoute,
+  } as any)
+const StaffLayoutInboundIndexRoute = StaffLayoutInboundIndexRouteImport.update({
+  id: '/inbound/',
+  path: '/inbound/',
+  getParentRoute: () => StaffLayoutRoute,
+} as any)
+const AdminLayoutPusatPersetujuanIndexRoute =
+  AdminLayoutPusatPersetujuanIndexRouteImport.update({
+    id: '/pusat-persetujuan/',
+    path: '/pusat-persetujuan/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPenjualanIndexRoute =
+  AdminLayoutPesananPenjualanIndexRouteImport.update({
+    id: '/pesanan-penjualan/',
+    path: '/pesanan-penjualan/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
 const AdminLayoutPesananPembelianIndexRoute =
   AdminLayoutPesananPembelianIndexRouteImport.update({
     id: '/pesanan-pembelian/',
     path: '/pesanan-pembelian/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPelacakanKirimanIndexRoute =
+  AdminLayoutPelacakanKirimanIndexRouteImport.update({
+    id: '/pelacakan-kiriman/',
+    path: '/pelacakan-kiriman/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutNotifikasiIndexRoute =
+  AdminLayoutNotifikasiIndexRouteImport.update({
+    id: '/notifikasi/',
+    path: '/notifikasi/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutManajemenPenggunaIndexRoute =
+  AdminLayoutManajemenPenggunaIndexRouteImport.update({
+    id: '/manajemen-pengguna/',
+    path: '/manajemen-pengguna/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutManajemenGudangIndexRoute =
+  AdminLayoutManajemenGudangIndexRouteImport.update({
+    id: '/manajemen-gudang/',
+    path: '/manajemen-gudang/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutKontrolPenerimaanIndexRoute =
+  AdminLayoutKontrolPenerimaanIndexRouteImport.update({
+    id: '/kontrol-penerimaan/',
+    path: '/kontrol-penerimaan/',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
 const AdminLayoutKatalogProdukIndexRoute =
@@ -117,6 +186,23 @@ const AdminLayoutDirektoriSupplierIndexRoute =
     path: '/direktori-supplier/',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
+const AdminLayoutAnalitikLaporanIndexRoute =
+  AdminLayoutAnalitikLaporanIndexRouteImport.update({
+    id: '/analitik-laporan/',
+    path: '/analitik-laporan/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const StaffLayoutInboundPoIdRoute = StaffLayoutInboundPoIdRouteImport.update({
+  id: '/inbound/$poId',
+  path: '/inbound/$poId',
+  getParentRoute: () => StaffLayoutRoute,
+} as any)
+const AdminLayoutPesananPenjualanCreateRoute =
+  AdminLayoutPesananPenjualanCreateRouteImport.update({
+    id: '/pesanan-penjualan/create',
+    path: '/pesanan-penjualan/create',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
 const AdminLayoutPesananPembelianCreateRoute =
   AdminLayoutPesananPembelianCreateRouteImport.update({
     id: '/pesanan-pembelian/create',
@@ -127,6 +213,30 @@ const AdminLayoutKatalogProdukProductIdRoute =
   AdminLayoutKatalogProdukProductIdRouteImport.update({
     id: '/katalog-produk/$productId',
     path: '/katalog-produk/$productId',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPenjualanSoIdIndexRoute =
+  AdminLayoutPesananPenjualanSoIdIndexRouteImport.update({
+    id: '/pesanan-penjualan/$soId/',
+    path: '/pesanan-penjualan/$soId/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPembelianPoIdIndexRoute =
+  AdminLayoutPesananPembelianPoIdIndexRouteImport.update({
+    id: '/pesanan-pembelian/$poId/',
+    path: '/pesanan-pembelian/$poId/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPenjualanSoIdEditRoute =
+  AdminLayoutPesananPenjualanSoIdEditRouteImport.update({
+    id: '/pesanan-penjualan/$soId/edit',
+    path: '/pesanan-penjualan/$soId/edit',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any)
+const AdminLayoutPesananPembelianPoIdEditRoute =
+  AdminLayoutPesananPembelianPoIdEditRouteImport.update({
+    id: '/pesanan-pembelian/$poId/edit',
+    path: '/pesanan-pembelian/$poId/edit',
     getParentRoute: () => AdminLayoutRoute,
   } as any)
 
@@ -147,9 +257,25 @@ export interface FileRoutesByFullPath {
   '/staff/': typeof StaffLayoutIndexRoute
   '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
   '/admin/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
+  '/admin/pesanan-penjualan/create': typeof AdminLayoutPesananPenjualanCreateRoute
+  '/staff/inbound/$poId': typeof StaffLayoutInboundPoIdRoute
+  '/admin/analitik-laporan/': typeof AdminLayoutAnalitikLaporanIndexRoute
   '/admin/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/kontrol-penerimaan/': typeof AdminLayoutKontrolPenerimaanIndexRoute
+  '/admin/manajemen-gudang/': typeof AdminLayoutManajemenGudangIndexRoute
+  '/admin/manajemen-pengguna/': typeof AdminLayoutManajemenPenggunaIndexRoute
+  '/admin/notifikasi/': typeof AdminLayoutNotifikasiIndexRoute
+  '/admin/pelacakan-kiriman/': typeof AdminLayoutPelacakanKirimanIndexRoute
   '/admin/pesanan-pembelian/': typeof AdminLayoutPesananPembelianIndexRoute
+  '/admin/pesanan-penjualan/': typeof AdminLayoutPesananPenjualanIndexRoute
+  '/admin/pusat-persetujuan/': typeof AdminLayoutPusatPersetujuanIndexRoute
+  '/staff/inbound/': typeof StaffLayoutInboundIndexRoute
+  '/staff/notifikasi/': typeof StaffLayoutNotifikasiIndexRoute
+  '/admin/pesanan-pembelian/$poId/edit': typeof AdminLayoutPesananPembelianPoIdEditRoute
+  '/admin/pesanan-penjualan/$soId/edit': typeof AdminLayoutPesananPenjualanSoIdEditRoute
+  '/admin/pesanan-pembelian/$poId/': typeof AdminLayoutPesananPembelianPoIdIndexRoute
+  '/admin/pesanan-penjualan/$soId/': typeof AdminLayoutPesananPenjualanSoIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -166,9 +292,25 @@ export interface FileRoutesByTo {
   '/staff': typeof StaffLayoutIndexRoute
   '/admin/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
   '/admin/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
+  '/admin/pesanan-penjualan/create': typeof AdminLayoutPesananPenjualanCreateRoute
+  '/staff/inbound/$poId': typeof StaffLayoutInboundPoIdRoute
+  '/admin/analitik-laporan': typeof AdminLayoutAnalitikLaporanIndexRoute
   '/admin/direktori-supplier': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/katalog-produk': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/kontrol-penerimaan': typeof AdminLayoutKontrolPenerimaanIndexRoute
+  '/admin/manajemen-gudang': typeof AdminLayoutManajemenGudangIndexRoute
+  '/admin/manajemen-pengguna': typeof AdminLayoutManajemenPenggunaIndexRoute
+  '/admin/notifikasi': typeof AdminLayoutNotifikasiIndexRoute
+  '/admin/pelacakan-kiriman': typeof AdminLayoutPelacakanKirimanIndexRoute
   '/admin/pesanan-pembelian': typeof AdminLayoutPesananPembelianIndexRoute
+  '/admin/pesanan-penjualan': typeof AdminLayoutPesananPenjualanIndexRoute
+  '/admin/pusat-persetujuan': typeof AdminLayoutPusatPersetujuanIndexRoute
+  '/staff/inbound': typeof StaffLayoutInboundIndexRoute
+  '/staff/notifikasi': typeof StaffLayoutNotifikasiIndexRoute
+  '/admin/pesanan-pembelian/$poId/edit': typeof AdminLayoutPesananPembelianPoIdEditRoute
+  '/admin/pesanan-penjualan/$soId/edit': typeof AdminLayoutPesananPenjualanSoIdEditRoute
+  '/admin/pesanan-pembelian/$poId': typeof AdminLayoutPesananPembelianPoIdIndexRoute
+  '/admin/pesanan-penjualan/$soId': typeof AdminLayoutPesananPenjualanSoIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -188,9 +330,25 @@ export interface FileRoutesById {
   '/staff/_layout/': typeof StaffLayoutIndexRoute
   '/admin/_layout/katalog-produk/$productId': typeof AdminLayoutKatalogProdukProductIdRoute
   '/admin/_layout/pesanan-pembelian/create': typeof AdminLayoutPesananPembelianCreateRoute
+  '/admin/_layout/pesanan-penjualan/create': typeof AdminLayoutPesananPenjualanCreateRoute
+  '/staff/_layout/inbound/$poId': typeof StaffLayoutInboundPoIdRoute
+  '/admin/_layout/analitik-laporan/': typeof AdminLayoutAnalitikLaporanIndexRoute
   '/admin/_layout/direktori-supplier/': typeof AdminLayoutDirektoriSupplierIndexRoute
   '/admin/_layout/katalog-produk/': typeof AdminLayoutKatalogProdukIndexRoute
+  '/admin/_layout/kontrol-penerimaan/': typeof AdminLayoutKontrolPenerimaanIndexRoute
+  '/admin/_layout/manajemen-gudang/': typeof AdminLayoutManajemenGudangIndexRoute
+  '/admin/_layout/manajemen-pengguna/': typeof AdminLayoutManajemenPenggunaIndexRoute
+  '/admin/_layout/notifikasi/': typeof AdminLayoutNotifikasiIndexRoute
+  '/admin/_layout/pelacakan-kiriman/': typeof AdminLayoutPelacakanKirimanIndexRoute
   '/admin/_layout/pesanan-pembelian/': typeof AdminLayoutPesananPembelianIndexRoute
+  '/admin/_layout/pesanan-penjualan/': typeof AdminLayoutPesananPenjualanIndexRoute
+  '/admin/_layout/pusat-persetujuan/': typeof AdminLayoutPusatPersetujuanIndexRoute
+  '/staff/_layout/inbound/': typeof StaffLayoutInboundIndexRoute
+  '/staff/_layout/notifikasi/': typeof StaffLayoutNotifikasiIndexRoute
+  '/admin/_layout/pesanan-pembelian/$poId/edit': typeof AdminLayoutPesananPembelianPoIdEditRoute
+  '/admin/_layout/pesanan-penjualan/$soId/edit': typeof AdminLayoutPesananPenjualanSoIdEditRoute
+  '/admin/_layout/pesanan-pembelian/$poId/': typeof AdminLayoutPesananPembelianPoIdIndexRoute
+  '/admin/_layout/pesanan-penjualan/$soId/': typeof AdminLayoutPesananPenjualanSoIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -211,9 +369,25 @@ export interface FileRouteTypes {
     | '/staff/'
     | '/admin/katalog-produk/$productId'
     | '/admin/pesanan-pembelian/create'
+    | '/admin/pesanan-penjualan/create'
+    | '/staff/inbound/$poId'
+    | '/admin/analitik-laporan/'
     | '/admin/direktori-supplier/'
     | '/admin/katalog-produk/'
+    | '/admin/kontrol-penerimaan/'
+    | '/admin/manajemen-gudang/'
+    | '/admin/manajemen-pengguna/'
+    | '/admin/notifikasi/'
+    | '/admin/pelacakan-kiriman/'
     | '/admin/pesanan-pembelian/'
+    | '/admin/pesanan-penjualan/'
+    | '/admin/pusat-persetujuan/'
+    | '/staff/inbound/'
+    | '/staff/notifikasi/'
+    | '/admin/pesanan-pembelian/$poId/edit'
+    | '/admin/pesanan-penjualan/$soId/edit'
+    | '/admin/pesanan-pembelian/$poId/'
+    | '/admin/pesanan-penjualan/$soId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -230,9 +404,25 @@ export interface FileRouteTypes {
     | '/staff'
     | '/admin/katalog-produk/$productId'
     | '/admin/pesanan-pembelian/create'
+    | '/admin/pesanan-penjualan/create'
+    | '/staff/inbound/$poId'
+    | '/admin/analitik-laporan'
     | '/admin/direktori-supplier'
     | '/admin/katalog-produk'
+    | '/admin/kontrol-penerimaan'
+    | '/admin/manajemen-gudang'
+    | '/admin/manajemen-pengguna'
+    | '/admin/notifikasi'
+    | '/admin/pelacakan-kiriman'
     | '/admin/pesanan-pembelian'
+    | '/admin/pesanan-penjualan'
+    | '/admin/pusat-persetujuan'
+    | '/staff/inbound'
+    | '/staff/notifikasi'
+    | '/admin/pesanan-pembelian/$poId/edit'
+    | '/admin/pesanan-penjualan/$soId/edit'
+    | '/admin/pesanan-pembelian/$poId'
+    | '/admin/pesanan-penjualan/$soId'
   id:
     | '__root__'
     | '/'
@@ -251,9 +441,25 @@ export interface FileRouteTypes {
     | '/staff/_layout/'
     | '/admin/_layout/katalog-produk/$productId'
     | '/admin/_layout/pesanan-pembelian/create'
+    | '/admin/_layout/pesanan-penjualan/create'
+    | '/staff/_layout/inbound/$poId'
+    | '/admin/_layout/analitik-laporan/'
     | '/admin/_layout/direktori-supplier/'
     | '/admin/_layout/katalog-produk/'
+    | '/admin/_layout/kontrol-penerimaan/'
+    | '/admin/_layout/manajemen-gudang/'
+    | '/admin/_layout/manajemen-pengguna/'
+    | '/admin/_layout/notifikasi/'
+    | '/admin/_layout/pelacakan-kiriman/'
     | '/admin/_layout/pesanan-pembelian/'
+    | '/admin/_layout/pesanan-penjualan/'
+    | '/admin/_layout/pusat-persetujuan/'
+    | '/staff/_layout/inbound/'
+    | '/staff/_layout/notifikasi/'
+    | '/admin/_layout/pesanan-pembelian/$poId/edit'
+    | '/admin/_layout/pesanan-penjualan/$soId/edit'
+    | '/admin/_layout/pesanan-pembelian/$poId/'
+    | '/admin/_layout/pesanan-penjualan/$soId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -365,11 +571,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutProfileRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/staff/_layout/notifikasi/': {
+      id: '/staff/_layout/notifikasi/'
+      path: '/notifikasi'
+      fullPath: '/staff/notifikasi/'
+      preLoaderRoute: typeof StaffLayoutNotifikasiIndexRouteImport
+      parentRoute: typeof StaffLayoutRoute
+    }
+    '/staff/_layout/inbound/': {
+      id: '/staff/_layout/inbound/'
+      path: '/inbound'
+      fullPath: '/staff/inbound/'
+      preLoaderRoute: typeof StaffLayoutInboundIndexRouteImport
+      parentRoute: typeof StaffLayoutRoute
+    }
+    '/admin/_layout/pusat-persetujuan/': {
+      id: '/admin/_layout/pusat-persetujuan/'
+      path: '/pusat-persetujuan'
+      fullPath: '/admin/pusat-persetujuan/'
+      preLoaderRoute: typeof AdminLayoutPusatPersetujuanIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pesanan-penjualan/': {
+      id: '/admin/_layout/pesanan-penjualan/'
+      path: '/pesanan-penjualan'
+      fullPath: '/admin/pesanan-penjualan/'
+      preLoaderRoute: typeof AdminLayoutPesananPenjualanIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
     '/admin/_layout/pesanan-pembelian/': {
       id: '/admin/_layout/pesanan-pembelian/'
       path: '/pesanan-pembelian'
       fullPath: '/admin/pesanan-pembelian/'
       preLoaderRoute: typeof AdminLayoutPesananPembelianIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pelacakan-kiriman/': {
+      id: '/admin/_layout/pelacakan-kiriman/'
+      path: '/pelacakan-kiriman'
+      fullPath: '/admin/pelacakan-kiriman/'
+      preLoaderRoute: typeof AdminLayoutPelacakanKirimanIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/notifikasi/': {
+      id: '/admin/_layout/notifikasi/'
+      path: '/notifikasi'
+      fullPath: '/admin/notifikasi/'
+      preLoaderRoute: typeof AdminLayoutNotifikasiIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/manajemen-pengguna/': {
+      id: '/admin/_layout/manajemen-pengguna/'
+      path: '/manajemen-pengguna'
+      fullPath: '/admin/manajemen-pengguna/'
+      preLoaderRoute: typeof AdminLayoutManajemenPenggunaIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/manajemen-gudang/': {
+      id: '/admin/_layout/manajemen-gudang/'
+      path: '/manajemen-gudang'
+      fullPath: '/admin/manajemen-gudang/'
+      preLoaderRoute: typeof AdminLayoutManajemenGudangIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/kontrol-penerimaan/': {
+      id: '/admin/_layout/kontrol-penerimaan/'
+      path: '/kontrol-penerimaan'
+      fullPath: '/admin/kontrol-penerimaan/'
+      preLoaderRoute: typeof AdminLayoutKontrolPenerimaanIndexRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
     '/admin/_layout/katalog-produk/': {
@@ -386,6 +655,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutDirektoriSupplierIndexRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/analitik-laporan/': {
+      id: '/admin/_layout/analitik-laporan/'
+      path: '/analitik-laporan'
+      fullPath: '/admin/analitik-laporan/'
+      preLoaderRoute: typeof AdminLayoutAnalitikLaporanIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/staff/_layout/inbound/$poId': {
+      id: '/staff/_layout/inbound/$poId'
+      path: '/inbound/$poId'
+      fullPath: '/staff/inbound/$poId'
+      preLoaderRoute: typeof StaffLayoutInboundPoIdRouteImport
+      parentRoute: typeof StaffLayoutRoute
+    }
+    '/admin/_layout/pesanan-penjualan/create': {
+      id: '/admin/_layout/pesanan-penjualan/create'
+      path: '/pesanan-penjualan/create'
+      fullPath: '/admin/pesanan-penjualan/create'
+      preLoaderRoute: typeof AdminLayoutPesananPenjualanCreateRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
     '/admin/_layout/pesanan-pembelian/create': {
       id: '/admin/_layout/pesanan-pembelian/create'
       path: '/pesanan-pembelian/create'
@@ -400,6 +690,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutKatalogProdukProductIdRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
+    '/admin/_layout/pesanan-penjualan/$soId/': {
+      id: '/admin/_layout/pesanan-penjualan/$soId/'
+      path: '/pesanan-penjualan/$soId'
+      fullPath: '/admin/pesanan-penjualan/$soId/'
+      preLoaderRoute: typeof AdminLayoutPesananPenjualanSoIdIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pesanan-pembelian/$poId/': {
+      id: '/admin/_layout/pesanan-pembelian/$poId/'
+      path: '/pesanan-pembelian/$poId'
+      fullPath: '/admin/pesanan-pembelian/$poId/'
+      preLoaderRoute: typeof AdminLayoutPesananPembelianPoIdIndexRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pesanan-penjualan/$soId/edit': {
+      id: '/admin/_layout/pesanan-penjualan/$soId/edit'
+      path: '/pesanan-penjualan/$soId/edit'
+      fullPath: '/admin/pesanan-penjualan/$soId/edit'
+      preLoaderRoute: typeof AdminLayoutPesananPenjualanSoIdEditRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
+    '/admin/_layout/pesanan-pembelian/$poId/edit': {
+      id: '/admin/_layout/pesanan-pembelian/$poId/edit'
+      path: '/pesanan-pembelian/$poId/edit'
+      fullPath: '/admin/pesanan-pembelian/$poId/edit'
+      preLoaderRoute: typeof AdminLayoutPesananPembelianPoIdEditRouteImport
+      parentRoute: typeof AdminLayoutRoute
+    }
   }
 }
 
@@ -410,9 +728,22 @@ interface AdminLayoutRouteChildren {
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
   AdminLayoutKatalogProdukProductIdRoute: typeof AdminLayoutKatalogProdukProductIdRoute
   AdminLayoutPesananPembelianCreateRoute: typeof AdminLayoutPesananPembelianCreateRoute
+  AdminLayoutPesananPenjualanCreateRoute: typeof AdminLayoutPesananPenjualanCreateRoute
+  AdminLayoutAnalitikLaporanIndexRoute: typeof AdminLayoutAnalitikLaporanIndexRoute
   AdminLayoutDirektoriSupplierIndexRoute: typeof AdminLayoutDirektoriSupplierIndexRoute
   AdminLayoutKatalogProdukIndexRoute: typeof AdminLayoutKatalogProdukIndexRoute
+  AdminLayoutKontrolPenerimaanIndexRoute: typeof AdminLayoutKontrolPenerimaanIndexRoute
+  AdminLayoutManajemenGudangIndexRoute: typeof AdminLayoutManajemenGudangIndexRoute
+  AdminLayoutManajemenPenggunaIndexRoute: typeof AdminLayoutManajemenPenggunaIndexRoute
+  AdminLayoutNotifikasiIndexRoute: typeof AdminLayoutNotifikasiIndexRoute
+  AdminLayoutPelacakanKirimanIndexRoute: typeof AdminLayoutPelacakanKirimanIndexRoute
   AdminLayoutPesananPembelianIndexRoute: typeof AdminLayoutPesananPembelianIndexRoute
+  AdminLayoutPesananPenjualanIndexRoute: typeof AdminLayoutPesananPenjualanIndexRoute
+  AdminLayoutPusatPersetujuanIndexRoute: typeof AdminLayoutPusatPersetujuanIndexRoute
+  AdminLayoutPesananPembelianPoIdEditRoute: typeof AdminLayoutPesananPembelianPoIdEditRoute
+  AdminLayoutPesananPenjualanSoIdEditRoute: typeof AdminLayoutPesananPenjualanSoIdEditRoute
+  AdminLayoutPesananPembelianPoIdIndexRoute: typeof AdminLayoutPesananPembelianPoIdIndexRoute
+  AdminLayoutPesananPenjualanSoIdIndexRoute: typeof AdminLayoutPesananPenjualanSoIdIndexRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
@@ -424,10 +755,30 @@ const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
     AdminLayoutKatalogProdukProductIdRoute,
   AdminLayoutPesananPembelianCreateRoute:
     AdminLayoutPesananPembelianCreateRoute,
+  AdminLayoutPesananPenjualanCreateRoute:
+    AdminLayoutPesananPenjualanCreateRoute,
+  AdminLayoutAnalitikLaporanIndexRoute: AdminLayoutAnalitikLaporanIndexRoute,
   AdminLayoutDirektoriSupplierIndexRoute:
     AdminLayoutDirektoriSupplierIndexRoute,
   AdminLayoutKatalogProdukIndexRoute: AdminLayoutKatalogProdukIndexRoute,
+  AdminLayoutKontrolPenerimaanIndexRoute:
+    AdminLayoutKontrolPenerimaanIndexRoute,
+  AdminLayoutManajemenGudangIndexRoute: AdminLayoutManajemenGudangIndexRoute,
+  AdminLayoutManajemenPenggunaIndexRoute:
+    AdminLayoutManajemenPenggunaIndexRoute,
+  AdminLayoutNotifikasiIndexRoute: AdminLayoutNotifikasiIndexRoute,
+  AdminLayoutPelacakanKirimanIndexRoute: AdminLayoutPelacakanKirimanIndexRoute,
   AdminLayoutPesananPembelianIndexRoute: AdminLayoutPesananPembelianIndexRoute,
+  AdminLayoutPesananPenjualanIndexRoute: AdminLayoutPesananPenjualanIndexRoute,
+  AdminLayoutPusatPersetujuanIndexRoute: AdminLayoutPusatPersetujuanIndexRoute,
+  AdminLayoutPesananPembelianPoIdEditRoute:
+    AdminLayoutPesananPembelianPoIdEditRoute,
+  AdminLayoutPesananPenjualanSoIdEditRoute:
+    AdminLayoutPesananPenjualanSoIdEditRoute,
+  AdminLayoutPesananPembelianPoIdIndexRoute:
+    AdminLayoutPesananPembelianPoIdIndexRoute,
+  AdminLayoutPesananPenjualanSoIdIndexRoute:
+    AdminLayoutPesananPenjualanSoIdIndexRoute,
 }
 
 const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
@@ -439,6 +790,9 @@ interface StaffLayoutRouteChildren {
   StaffLayoutProfileRoute: typeof StaffLayoutProfileRoute
   StaffLayoutStockRoute: typeof StaffLayoutStockRoute
   StaffLayoutIndexRoute: typeof StaffLayoutIndexRoute
+  StaffLayoutInboundPoIdRoute: typeof StaffLayoutInboundPoIdRoute
+  StaffLayoutInboundIndexRoute: typeof StaffLayoutInboundIndexRoute
+  StaffLayoutNotifikasiIndexRoute: typeof StaffLayoutNotifikasiIndexRoute
 }
 
 const StaffLayoutRouteChildren: StaffLayoutRouteChildren = {
@@ -446,6 +800,9 @@ const StaffLayoutRouteChildren: StaffLayoutRouteChildren = {
   StaffLayoutProfileRoute: StaffLayoutProfileRoute,
   StaffLayoutStockRoute: StaffLayoutStockRoute,
   StaffLayoutIndexRoute: StaffLayoutIndexRoute,
+  StaffLayoutInboundPoIdRoute: StaffLayoutInboundPoIdRoute,
+  StaffLayoutInboundIndexRoute: StaffLayoutInboundIndexRoute,
+  StaffLayoutNotifikasiIndexRoute: StaffLayoutNotifikasiIndexRoute,
 }
 
 const StaffLayoutRouteWithChildren = StaffLayoutRoute._addFileChildren(

@@ -17,7 +17,9 @@ import {
   ShieldCheck,
   FileBarChart,
 } from 'lucide-react';
-import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { DashboardLayout, type SidebarMenuGroup } from '@/components/templates/DashboardLayout';
+import { ThemeProvider } from '@/contexts/ThemeProvider';
+import { useTheme } from '@/contexts/themeHooks';
 
 export const Route = createFileRoute('/admin/_layout')({
   beforeLoad: async () => {
@@ -128,26 +130,46 @@ function AdminLayout() {
   };
 
   return (
-    <DashboardLayout
-      theme="admin"
-      sidebarTitle="ADMIN"
-      sidebarSubtitle="Management"
-      sidebarMenu={SIDEBAR_MENU}
-      baseRoute="/admin"
-      headerTitle="Administrator Console"
-      userInitials="A"
-      userName="Admin User"
-      userRole="System Manager"
-      dropdownItems={[
-        { name: 'Profile', path: '/admin/profile', icon: <User className="h-6 w-6" /> },
-        { name: 'Settings', path: '/admin/settings', icon: <Settings className="h-6 w-6" /> },
-      ]}
-      onLogout={handleLogout}
-      logoutIcon={<ShieldAlert className="h-12 w-12 text-red-500 mb-4" />}
-      logoutTitle="Confirm Logout"
-      logoutDescription="Are you sure you want to end your admin session?"
-      logoutWarningText="You will be required to sign in again to access the administrator console."
-      logoutConfirmText="Yes, Logout"
-    />
+    <ThemeProvider>
+      <AdminLayoutWithTheme sidebarMenu={SIDEBAR_MENU} handleLogout={handleLogout} />
+    </ThemeProvider>
+  );
+}
+
+function AdminLayoutWithTheme({
+  sidebarMenu,
+  handleLogout,
+}: {
+  sidebarMenu: SidebarMenuGroup[];
+  handleLogout: () => void;
+}) {
+  const { theme } = useTheme();
+
+  return (
+    <div
+      className={`${theme === 'dark' ? 'dark' : ''} min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors duration-200`}
+    >
+      <DashboardLayout
+        theme="admin"
+        sidebarTitle="ADMIN"
+        sidebarSubtitle="Management"
+        sidebarMenu={sidebarMenu}
+        baseRoute="/admin"
+        headerTitle="Administrator Console"
+        userInitials="A"
+        userName="Admin User"
+        userRole="System Manager"
+        dropdownItems={[
+          { name: 'Profile', path: '/admin/profile', icon: <User className="h-6 w-6" /> },
+          { name: 'Settings', path: '/admin/settings', icon: <Settings className="h-6 w-6" /> },
+        ]}
+        onLogout={handleLogout}
+        logoutIcon={<ShieldAlert className="h-12 w-12 text-red-500 mb-4" />}
+        logoutTitle="Confirm Logout"
+        logoutDescription="Are you sure you want to end your admin session?"
+        logoutWarningText="You will be required to sign in again to access the administrator console."
+        logoutConfirmText="Yes, Logout"
+      />
+    </div>
   );
 }

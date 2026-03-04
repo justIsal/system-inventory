@@ -6,13 +6,10 @@ import { routeTree } from './routeTree.gen.ts';
 import { NotFound } from '@/components/molecules/NotFound';
 import './index.css';
 
-// Create a new router instance
 const router = createRouter({ 
   routeTree,
   defaultNotFoundComponent: NotFound
 });
-
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;

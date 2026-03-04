@@ -1,0 +1,17 @@
+import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/admin/_layout/pelacakan-kiriman/')({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  return (
+    <div className="space-y-6 mx-auto pb-10">
+      <Breadcrumbs
+        items={[{ label: 'Dashboard', path: '/admin' }, { label: 'Pelacakan Kiriman' }]}
+        className="mb-8"
+      />
+    </div>
+  );
+}
