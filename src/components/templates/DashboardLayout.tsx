@@ -65,7 +65,7 @@ export const DashboardLayout = ({
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  const { socket, incrementUnreadCount, unreadNotifications, resetUnreadCount } = useSocket();
+  const { incrementUnreadCount, unreadNotifications, resetUnreadCount } = useSocket();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const navigate = useNavigate();
 
@@ -96,9 +96,10 @@ export const DashboardLayout = ({
   };
 
   useEffect(() => {
-    if (!socket) return;
+    const handleNewNotification = (e: Event) => {
+      const customEvent = e as CustomEvent<Notification>;
+      const notif = customEvent.detail;
 
-    const handleNewNotification = (notif: Notification) => {
       setNotifications((prev) => [notif, ...prev].slice(0, 10)); // keep last 10
       incrementUnreadCount();
 
@@ -117,12 +118,12 @@ export const DashboardLayout = ({
       });
     };
 
-    socket.on('notification', handleNewNotification);
+    window.addEventListener('supabase-notification', handleNewNotification);
 
     return () => {
-      socket.off('notification', handleNewNotification);
+      window.removeEventListener('supabase-notification', handleNewNotification);
     };
-  }, [socket, incrementUnreadCount, navigate]);
+  }, [incrementUnreadCount, navigate]);
 
   const markAllRead = async () => {
     try {

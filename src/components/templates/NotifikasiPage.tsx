@@ -10,7 +10,7 @@ export const NotifikasiPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
   const navigate = useNavigate();
-  const { socket, resetUnreadCount } = useSocket();
+  const { resetUnreadCount } = useSocket();
 
   const fetchNotifications = async () => {
     try {
@@ -32,19 +32,18 @@ export const NotifikasiPage = () => {
 
   // Listen for realtime updates while on the page
   useEffect(() => {
-    if (!socket) return;
-
-    const handleNewNotification = (notif: Notification) => {
-      setNotifications((prev) => [notif, ...prev]);
-      // Context handles its own unread count, but we can also trigger a re-fetch if we prefer.
+    // The SocketContext translates Supabase RLS payloads into a generic window-level CustomEvent
+    const handleNewNotification = (e: Event) => {
+      const customEvent = e as CustomEvent<Notification>;
+      setNotifications((prev) => [customEvent.detail, ...prev]);
     };
 
-    socket.on('notification', handleNewNotification);
+    window.addEventListener('supabase-notification', handleNewNotification);
 
     return () => {
-      socket.off('notification', handleNewNotification);
+      window.removeEventListener('supabase-notification', handleNewNotification);
     };
-  }, [socket]);
+  }, []);
 
   const handleMarkAsRead = async (id: number) => {
     try {

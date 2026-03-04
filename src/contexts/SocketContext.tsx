@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { supabase } from '@/lib/supabaseClient';
 
 // Define the shape of our context
 interface SocketContextType {
-  socket: Socket | null;
   isConnected: boolean;
   unreadNotifications: number;
   incrementUnreadCount: () => void;
@@ -11,7 +10,6 @@ interface SocketContextType {
 }
 
 const SocketContext = createContext<SocketContextType>({
-  socket: null,
   isConnected: false,
   unreadNotifications: 0,
   incrementUnreadCount: () => {},
@@ -22,7 +20,6 @@ const SocketContext = createContext<SocketContextType>({
 export const useSocket = () => useContext(SocketContext);
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
@@ -33,60 +30,65 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Only connect if user is authenticated
     if (!token) return;
 
-    // TODO: Ideally use env variables for URL
-    let backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    if (backendUrl.endsWith('/api')) {
-      backendUrl = backendUrl.slice(0, -4);
+    let userId: number | null = null;
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(''),
+      );
+      const decoded = JSON.parse(jsonPayload);
+      if (decoded.userId) {
+        userId = decoded.userId;
+      }
+    } catch (err) {
+      console.error('Failed to decode token for Supabase RLS Registration', err);
+      return;
     }
 
-    // Initialize standard socket connection with JWT
-    const newSocket = io(backendUrl, {
-      auth: { token },
-      autoConnect: true,
-      reconnection: true,
-      transports: ['websocket'],
+    if (!userId) return;
+
+    // Inject Express Custom JWT into Supabase Session so we can bypass Anon constraints
+    supabase.auth.setSession({
+      access_token: token,
+      refresh_token: '',
     });
 
-    // eslint-disable-next-line
-    setSocket(newSocket);
-
-    // Bind basic connection events
-    newSocket.on('connect', () => {
-      console.log('Socket.IO Connected', newSocket.id);
-      setIsConnected(true);
-
-      try {
-        // Parse token to get user_id and register for personal notifications room
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-          window
-            .atob(base64)
-            .split('')
-            .map((c) => {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join(''),
-        );
-        const decoded = JSON.parse(jsonPayload);
-
-        if (decoded.userId) {
-          newSocket.emit('register', decoded.userId);
+    const newChannel = supabase
+      .channel(`user-${userId}-notifications`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${userId}`, // Explicit safety layer mirroring the RLS
+        },
+        (payload) => {
+          console.log('Realtime Notification Received via Supabase RLS:', payload);
+          // 1. Convert PostgreSQL Payload to match expected app model
+          const notif = payload.new;
+          // 2. Dispatch a Custom DOM Event to cross-communicate with Toast Notification UI
+          const event = new CustomEvent('supabase-notification', { detail: notif });
+          window.dispatchEvent(event);
+          // 3. Increment our simple Context Bell visually
+          setUnreadNotifications((prev) => prev + 1);
+        },
+      )
+      .subscribe((status) => {
+        setIsConnected(status === 'SUBSCRIBED');
+        if (status === 'SUBSCRIBED') {
+          console.log('Supabase Realtime Channel Connected for User:', userId);
         }
-      } catch (err) {
-        console.error('Failed to decode token for socket registration', err);
-      }
-    });
+      });
 
-    newSocket.on('disconnect', () => {
-      console.log('Socket.IO Disconnected');
-      setIsConnected(false);
-    });
-
-    // Cleanup socket on unmount
     return () => {
-      if (newSocket) {
-        newSocket.disconnect();
+      if (newChannel) {
+        supabase.removeChannel(newChannel);
       }
     };
   }, []); // Reconnect ideally fires on token change, but App Layout re-renders
@@ -102,7 +104,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   return (
     <SocketContext.Provider
       value={{
-        socket,
         isConnected,
         unreadNotifications,
         incrementUnreadCount,
