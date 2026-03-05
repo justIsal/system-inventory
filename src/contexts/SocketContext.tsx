@@ -78,6 +78,13 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           setUnreadNotifications((prev) => prev + 1);
         },
       )
+      .on('broadcast', { event: 'supabase-notification' }, (payload) => {
+        console.log('📡 RAW BROADCAST RECEIVED:', payload);
+        const notif = payload.payload;
+        const event = new CustomEvent('supabase-notification', { detail: notif });
+        window.dispatchEvent(event);
+        setUnreadNotifications((prev) => prev + 1);
+      })
       .subscribe((status) => {
         setIsConnected(status === 'SUBSCRIBED');
         if (status === 'SUBSCRIBED') {
