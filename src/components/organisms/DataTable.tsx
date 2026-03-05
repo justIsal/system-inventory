@@ -101,14 +101,26 @@ export function DataTable<T>({
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-slate-700/80">
             {isLoading ? (
-              <tr>
-                <td
-                  colSpan={columns.length + (actions ? 2 : 1)}
-                  className="px-4 py-8 text-center text-gray-500"
+              Array.from({ length: 5 }).map((_, rowIndex) => (
+                <tr
+                  key={`skeleton-row-${rowIndex}`}
+                  className="animate-pulse border-b border-gray-100 dark:border-slate-700/80"
                 >
-                  Memuat data...
-                </td>
-              </tr>
+                  <td className="p-4 w-4">
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-4"></div>
+                  </td>
+                  {columns.map((col, i) => (
+                    <td key={`skeleton-col-${i}`} className={`px-4 py-4 ${col.className || ''}`}>
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4"></div>
+                    </td>
+                  ))}
+                  {actions && (
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-8 mx-auto"></div>
+                    </td>
+                  )}
+                </tr>
+              ))
             ) : data.length === 0 ? (
               <tr>
                 <td
