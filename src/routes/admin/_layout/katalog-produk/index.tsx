@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useState, useEffect, useCallback } from 'react';
-import { CatalogToolbar, type SortConfig } from '@/components/organisms/CatalogToolbar';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { CatalogToolbar } from '@/components/organisms/CatalogToolbar';
 import { DataTable, type ColumnDef } from '@/components/organisms/DataTable';
 import { Badge } from '@/components/atoms/Badge';
 import { productService } from '@/services/api/productService';
@@ -14,12 +14,44 @@ import { Alert } from '@/components/molecules/Alert';
 import { ProductForm } from '@/components/organisms/ProductForm';
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
 
+type ProductSearch = {
+  page: number;
+  pageSize: number;
+  search: string;
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  category: string;
+  inStock: boolean;
+};
+
 export const Route = createFileRoute('/admin/_layout/katalog-produk/')({
   component: KatalogProdukPage,
+  validateSearch: (search: Record<string, unknown>): ProductSearch => {
+    return {
+      page: Number(search?.page ?? 1),
+      pageSize: Number(search?.pageSize ?? 10),
+      search: (search.search as string) || '',
+      sortBy: (search.sortBy as string) || 'product_id',
+      sortOrder: search.sortOrder === 'asc' ? 'asc' : 'desc',
+      category: (search.category as string) || '',
+      inStock: search.inStock === 'true' || search.inStock === true,
+    };
+  },
 });
 
 function KatalogProdukPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const searchParams = Route.useSearch();
+  const navigate = useNavigate({ from: '/admin/katalog-produk/' });
+
+  const updateSearchParams = (newParams: Partial<ProductSearch>) => {
+    navigate({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      search: { ...searchParams, ...newParams } as any,
+      replace: true,
+    });
+  };
+
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -33,14 +65,6 @@ function KatalogProdukPage() {
   } | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  // Pagination, Search & Sort State
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'product_id', order: 'desc' });
-  const [filterConfig, setFilterConfig] = useState<{ category?: string; inStock?: boolean }>({});
-
   const fetchCategories = async () => {
     try {
       const data = await categoryService.getAllCategories();
@@ -50,60 +74,110 @@ function KatalogProdukPage() {
     }
   };
 
-  const fetchProducts = useCallback(async () => {
+  // Fetch all products ONCE on mount
+  const fetchAllProducts = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await productService.getProducts(
-        currentPage,
-        pageSize,
-        searchQuery,
-        sortConfig.key,
-        sortConfig.order,
-        // Note: Filters could be passed to backend here when supported natively
-      );
-
-      // Temporary client-side filtering while evaluating backend models
-      let filteredData = response.data;
-      if (filterConfig.category) {
-        filteredData = filteredData.filter(
-          (p) => (p.category?.name || 'Elektronik') === filterConfig.category,
-        );
-      }
-      if (filterConfig.inStock) {
-        filteredData = filteredData.filter((p) => {
-          const totalStock =
-            p.variants?.reduce(
-              (acc, v) => acc + (v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0),
-              0,
-            ) || 0;
-          return totalStock > 0;
-        });
-      }
-
-      setProducts(filteredData);
-      setTotalPages(response.totalPages ?? 1);
+      // Request a large limit to cache them locally for client-side operations
+      const response = await productService.getProducts(1, 1000);
+      setAllProducts(response.data);
     } catch (error) {
       console.error('Failed to fetch products:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [
-    currentPage,
-    pageSize,
-    searchQuery,
-    sortConfig.key,
-    sortConfig.order,
-    filterConfig.category,
-    filterConfig.inStock,
-  ]);
-
-  useEffect(() => {
-    fetchCategories();
   }, []);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchCategories();
+    fetchAllProducts();
+  }, [fetchAllProducts]);
+
+  // Client-side processing (Search, Filter, Sort)
+  const processedProducts = useMemo(() => {
+    let result = [...allProducts];
+
+    // 1. Search
+    if (searchParams.search) {
+      const q = searchParams.search.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.variants?.some((v) => v.sku.toLowerCase().includes(q)),
+      );
+    }
+
+    // 2. Filter by Category
+    if (searchParams.category) {
+      result = result.filter((p) => (p.category?.name || 'Elektronik') === searchParams.category);
+    }
+
+    // 3. Filter by inStock
+    if (searchParams.inStock) {
+      result = result.filter((p) => {
+        const totalStock =
+          p.variants?.reduce(
+            (acc, v) => acc + (v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0),
+            0,
+          ) || 0;
+        return totalStock > 0;
+      });
+    }
+
+    // 4. Sort
+    result.sort((a, b) => {
+      let valA: number | string = 0;
+      let valB: number | string = 0;
+
+      if (searchParams.sortBy === 'name') {
+        valA = a.name.toLowerCase();
+        valB = b.name.toLowerCase();
+      } else if (searchParams.sortBy === 'price_buy') {
+        valA = a.variants?.length
+          ? Math.min(...a.variants.map((v) => Number(v.price_buy || 0)))
+          : 0;
+        valB = b.variants?.length
+          ? Math.min(...b.variants.map((v) => Number(v.price_buy || 0)))
+          : 0;
+      } else if (searchParams.sortBy === 'current_stock') {
+        valA =
+          a.variants?.reduce(
+            (acc, v) => acc + (v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0),
+            0,
+          ) || 0;
+        valB =
+          b.variants?.reduce(
+            (acc, v) => acc + (v.stocks?.reduce((sAcc, s) => sAcc + s.quantity, 0) || 0),
+            0,
+          ) || 0;
+      } else {
+        // default sort by product_id
+        valA = a.product_id;
+        valB = b.product_id;
+      }
+
+      if (valA < valB) return searchParams.sortOrder === 'asc' ? -1 : 1;
+      if (valA > valB) return searchParams.sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return result;
+  }, [
+    allProducts,
+    searchParams.search,
+    searchParams.category,
+    searchParams.inStock,
+    searchParams.sortBy,
+    searchParams.sortOrder,
+  ]);
+
+  // 5. Pagination
+  const totalPages = Math.ceil(processedProducts.length / searchParams.pageSize) || 1;
+  const paginatedProducts = useMemo(() => {
+    const start = (searchParams.page - 1) * searchParams.pageSize;
+    const end = start + searchParams.pageSize;
+    return processedProducts.slice(start, end);
+  }, [processedProducts, searchParams.page, searchParams.pageSize]);
 
   const handleConfirmDelete = async () => {
     if (selectedProducts.length === 0) return;
@@ -121,12 +195,13 @@ function KatalogProdukPage() {
       setSelectedProducts([]); // Clear selection
       setIsDeleteModalOpen(false);
 
-      // If we deleted all items on the current page, we might want to go back a page
-      if (products.length === idsToDelete.length && currentPage > 1) {
-        setCurrentPage((prev) => prev - 1);
-      } else {
-        fetchProducts();
+      // If we deleted all items on the current page locally
+      if (paginatedProducts.length === idsToDelete.length && searchParams.page > 1) {
+        updateSearchParams({ page: searchParams.page - 1 });
       }
+
+      // Update local allProducts cache immediately without refetching from DB
+      setAllProducts((prev) => prev.filter((p) => !idsToDelete.includes(p.product_id)));
 
       setTimeout(() => setNotification(null), 5000);
     } catch (err: unknown) {
@@ -149,8 +224,8 @@ function KatalogProdukPage() {
       await productService.createProduct(data);
       setIsAddModalOpen(false);
       setNotification({ type: 'success', message: 'Produk berhasil ditambahkan ke katalog.' });
-      setCurrentPage(1);
-      fetchProducts();
+      updateSearchParams({ page: 1 });
+      fetchAllProducts(); // Refresh cache to load new database records including nested relations
 
       // Auto dismiss success notification after 5 seconds
       setTimeout(() => setNotification(null), 5000);
@@ -183,7 +258,7 @@ function KatalogProdukPage() {
       setIsEditModalOpen(false);
       setEditingProduct(null);
       setNotification({ type: 'success', message: 'Produk berhasil diperbarui.' });
-      fetchProducts();
+      fetchAllProducts(); // Refresh cache from remote to ensure variant changes are fully synced
       setTimeout(() => setNotification(null), 5000);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
@@ -307,37 +382,45 @@ function KatalogProdukPage() {
         categories={categories}
         selectedCount={selectedProducts.length}
         onSearchChange={(val) => {
-          setSearchQuery(val);
-          setCurrentPage(1); // Reset to first page on search
+          updateSearchParams({ search: val, page: 1 });
         }}
         onDeleteSelected={() => setIsDeleteModalOpen(true)}
         onAddClick={() => setIsAddModalOpen(true)}
-        currentSort={sortConfig}
+        currentSort={{ key: searchParams.sortBy, order: searchParams.sortOrder }}
+        sortOptions={[
+          { label: 'Terbaru Ditambahkan', key: 'product_id', order: 'desc' },
+          { label: 'Nama (A-Z)', key: 'name', order: 'asc' },
+          { label: 'Nama (Z-A)', key: 'name', order: 'desc' },
+          { label: 'Harga Terendah', key: 'price_buy', order: 'asc' },
+          { label: 'Harga Tertinggi', key: 'price_buy', order: 'desc' },
+          { label: 'Stok Terendah', key: 'current_stock', order: 'asc' },
+          { label: 'Stok Tertinggi', key: 'current_stock', order: 'desc' },
+        ]}
         onSortChange={(sort) => {
-          setSortConfig(sort);
-          setCurrentPage(1);
+          updateSearchParams({ sortBy: sort.key, sortOrder: sort.order, page: 1 });
         }}
-        currentFilters={filterConfig}
+        currentFilters={{ category: searchParams.category, inStock: searchParams.inStock }}
         onFilterChange={(filters) => {
-          setFilterConfig(filters);
-          setCurrentPage(1);
+          updateSearchParams({ category: filters.category, inStock: filters.inStock, page: 1 });
+        }}
+        onResetFilter={() => {
+          updateSearchParams({ category: '', inStock: false, page: 1 });
         }}
       />
 
       <DataTable
         columns={columns}
-        data={products}
+        data={paginatedProducts}
         keyExtractor={(row) => row.product_id}
         isLoading={isLoading}
         onRowSelectionChange={setSelectedProducts}
         pagination={{
-          currentPage,
+          currentPage: searchParams.page,
           totalPages,
-          pageSize,
-          onPageChange: setCurrentPage,
+          pageSize: searchParams.pageSize,
+          onPageChange: (p) => updateSearchParams({ page: p }),
           onPageSizeChange: (size) => {
-            setPageSize(size);
-            setCurrentPage(1);
+            updateSearchParams({ pageSize: size, page: 1 });
           },
         }}
       />
