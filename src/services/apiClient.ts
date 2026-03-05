@@ -20,15 +20,28 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+let isRefreshing = false;
+let failedQueue: { resolve: (value?: unknown) => void; reject: (reason?: unknown) => void }[] = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 // Response interceptor to handle 401 Unauthorized (Token Expiry)
 apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (error: any) => {
     const originalRequest = error.config;
 
-    // Prevent infinite loop by checking a custom flag `_retry`
+    // Catch 401s
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // Skip token refresh logic for login and register endpoints
       if (
         originalRequest.url?.includes(API_ROUTES.AUTH.LOGIN) ||
         originalRequest.url?.includes(API_ROUTES.AUTH.REGISTER)
@@ -36,18 +49,36 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
       }
 
+      if (isRefreshing) {
+        // Queue parallel requests that hit 401 while a refresh is already in-flight
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers['Authorization'] = 'Bearer ' + token;
+            return apiClient(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
+
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) throw new Error('No refresh token available');
 
         // Directly call axios (not apiClient) to avoid interceptor loops
         const res = await axios.post(`${API_URL}${API_ROUTES.AUTH.REFRESH}`, {
-          token: refreshToken,
+          refreshToken: refreshToken, // FIXED payload mismatch (was 'token')
         });
-        const { accessToken } = res.data.data;
 
+        const { accessToken } = res.data.data;
         localStorage.setItem('accessToken', accessToken);
+
+        processQueue(null, accessToken);
 
         // Update specific failed request header
         if (originalRequest.headers) {
@@ -57,6 +88,8 @@ apiClient.interceptors.response.use(
         // Retry the original request
         return apiClient(originalRequest);
       } catch (err) {
+        processQueue(err, null);
+
         // Refresh token invalid or expired, enforce full logout
         const userStr = localStorage.getItem('user');
         let loginPath = '/';
@@ -75,6 +108,8 @@ apiClient.interceptors.response.use(
 
         window.location.href = loginPath; // Redirect to specific portal
         return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
       }
     }
 
