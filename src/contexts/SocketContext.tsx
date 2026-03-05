@@ -66,7 +66,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${userId}`, // Explicit safety layer mirroring the RLS
         },
         (payload) => {
           console.log('Realtime Notification Received via Supabase RLS:', payload);
