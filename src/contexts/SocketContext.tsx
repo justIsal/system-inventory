@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
 // Define the shape of our context
@@ -86,21 +86,21 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
   }, []); // Reconnect ideally fires on token change, but App Layout re-renders
 
-  const incrementUnreadCount = () => {
+  const incrementUnreadCount = useCallback(() => {
     setUnreadNotifications((prev) => prev + 1);
-  };
+  }, []);
 
-  const decrementUnreadCount = () => {
+  const decrementUnreadCount = useCallback(() => {
     setUnreadNotifications((prev) => Math.max(0, prev - 1));
-  };
+  }, []);
 
-  const setUnreadCount = (count: number) => {
+  const setUnreadCount = useCallback((count: number) => {
     setUnreadNotifications(count);
-  };
+  }, []);
 
-  const resetUnreadCount = () => {
+  const resetUnreadCount = useCallback(() => {
     setUnreadNotifications(0);
-  };
+  }, []);
 
   return (
     <SocketContext.Provider
