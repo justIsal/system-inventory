@@ -79,7 +79,7 @@ export const DashboardLayout = ({
     // Initial fetch of unread notifications
     const getNotifications = async () => {
       try {
-        const data = await notificationService.getNotifications(10);
+        const data = await notificationService.getNotifications(50, true);
         setNotifications(data.notifications || []);
         if (data.unreadCount !== undefined) {
           setUnreadCount(data.unreadCount);

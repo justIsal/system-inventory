@@ -20,8 +20,11 @@ export interface NotificationResponse {
 }
 
 export const notificationService = {
-  getNotifications: async (limit: number = 20): Promise<NotificationResponse> => {
-    const response = await apiClient.get(`/notifications?limit=${limit}`);
+  getNotifications: async (
+    limit: number = 20,
+    unreadOnly: boolean = false,
+  ): Promise<NotificationResponse> => {
+    const response = await apiClient.get(`/notifications?limit=${limit}&unreadOnly=${unreadOnly}`);
     // The backend Express router sends: { success: true, data: { notifications, unreadCount } }
     // Axios wraps that in `data`. So response.data is the full JSON payload.
     // The inner data holds the actual objects matching NotificationResponse.
