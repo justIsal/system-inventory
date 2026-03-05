@@ -15,6 +15,7 @@ import {
   History,
 } from 'lucide-react';
 import { DashboardLayout } from '@/components/templates/DashboardLayout';
+import { SocketProvider } from '@/contexts/SocketContext';
 
 export const Route = createFileRoute('/staff/_layout')({
   beforeLoad: async () => {
@@ -38,7 +39,13 @@ function StaffLayout() {
 
   const SIDEBAR_MENU = [
     {
-      items: [{ name: 'Dashboard', path: '/staff', icon: <LayoutDashboard className="h-[18px] w-[18px]" /> }],
+      items: [
+        {
+          name: 'Dashboard',
+          path: '/staff',
+          icon: <LayoutDashboard className="h-[18px] w-[18px]" />,
+        },
+      ],
     },
     {
       label: 'LOGISTIK MASUK',
@@ -58,7 +65,11 @@ function StaffLayout() {
           path: '/staff/picking',
           icon: <ClipboardList className="h-[18px] w-[18px]" />,
         },
-        { name: 'Packing & Manifest', path: '/staff/packing', icon: <Box className="h-[18px] w-[18px]" /> },
+        {
+          name: 'Packing & Manifest',
+          path: '/staff/packing',
+          icon: <Box className="h-[18px] w-[18px]" />,
+        },
       ],
     },
     {
@@ -100,25 +111,27 @@ function StaffLayout() {
   };
 
   return (
-    <DashboardLayout
-      theme="staff"
-      sidebarTitle="asdfasdf"
-      sidebarMenu={SIDEBAR_MENU}
-      baseRoute="/staff"
-      headerTitle="Staff Dashboard"
-      userInitials="S"
-      userName="Staff User"
-      userRole="Warehouse Operator"
-      dropdownItems={[
-        { name: 'Profile', path: '/staff/profile', icon: <User className="h-4 w-4" /> },
-        { name: 'Gudang', path: '/staff/gudang', icon: <Building2 className="h-4 w-4" /> },
-      ]}
-      onLogout={handleLogout}
-      logoutIcon={<DoorOpen className="h-12 w-12 text-red-500 mb-4" />}
-      logoutTitle="Sign Out"
-      logoutDescription="Are you sure you want to end your current staff shift?"
-      logoutWarningText="Please make sure all ongoing operations are saved."
-      logoutConfirmText="Sign Out"
-    />
+    <SocketProvider>
+      <DashboardLayout
+        theme="staff"
+        sidebarTitle="asdfasdf"
+        sidebarMenu={SIDEBAR_MENU}
+        baseRoute="/staff"
+        headerTitle="Staff Dashboard"
+        userInitials="S"
+        userName="Staff User"
+        userRole="Warehouse Operator"
+        dropdownItems={[
+          { name: 'Profile', path: '/staff/profile', icon: <User className="h-4 w-4" /> },
+          { name: 'Gudang', path: '/staff/gudang', icon: <Building2 className="h-4 w-4" /> },
+        ]}
+        onLogout={handleLogout}
+        logoutIcon={<DoorOpen className="h-12 w-12 text-red-500 mb-4" />}
+        logoutTitle="Sign Out"
+        logoutDescription="Are you sure you want to end your current staff shift?"
+        logoutWarningText="Please make sure all ongoing operations are saved."
+        logoutConfirmText="Sign Out"
+      />
+    </SocketProvider>
   );
 }

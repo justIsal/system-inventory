@@ -65,7 +65,13 @@ export const DashboardLayout = ({
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-  const { incrementUnreadCount, unreadNotifications, resetUnreadCount } = useSocket();
+  const {
+    incrementUnreadCount,
+    decrementUnreadCount,
+    setUnreadCount,
+    unreadNotifications,
+    resetUnreadCount,
+  } = useSocket();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const navigate = useNavigate();
 
@@ -75,20 +81,27 @@ export const DashboardLayout = ({
       try {
         const data = await notificationService.getNotifications(10);
         setNotifications(data.notifications || []);
-        // We sync unread count strictly via state if we wanted, or fetch from data.unreadCount
-        // But the context already has `unreadNotifications`. Let's just update local list for now.
+        if (data.unreadCount !== undefined) {
+          setUnreadCount(data.unreadCount);
+        }
       } catch (err) {
         console.error('Failed to load notifications', err);
       }
     };
     getNotifications();
-  }, []);
+  }, [setUnreadCount]);
 
   const markRead = async (id: number) => {
     try {
       await notificationService.markAsRead(id);
       setNotifications((prev) =>
-        prev.map((n) => (n.notification_id === id ? { ...n, is_read: true } : n)),
+        prev.map((n) => {
+          if (n.notification_id === id && !n.is_read) {
+            decrementUnreadCount();
+            return { ...n, is_read: true };
+          }
+          return n;
+        }),
       );
     } catch {
       // ignore

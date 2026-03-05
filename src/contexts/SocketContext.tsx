@@ -6,6 +6,8 @@ interface SocketContextType {
   isConnected: boolean;
   unreadNotifications: number;
   incrementUnreadCount: () => void;
+  decrementUnreadCount: () => void;
+  setUnreadCount: (count: number) => void;
   resetUnreadCount: () => void;
 }
 
@@ -13,6 +15,8 @@ const SocketContext = createContext<SocketContextType>({
   isConnected: false,
   unreadNotifications: 0,
   incrementUnreadCount: () => {},
+  decrementUnreadCount: () => {},
+  setUnreadCount: () => {},
   resetUnreadCount: () => {},
 });
 
@@ -86,6 +90,14 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setUnreadNotifications((prev) => prev + 1);
   };
 
+  const decrementUnreadCount = () => {
+    setUnreadNotifications((prev) => Math.max(0, prev - 1));
+  };
+
+  const setUnreadCount = (count: number) => {
+    setUnreadNotifications(count);
+  };
+
   const resetUnreadCount = () => {
     setUnreadNotifications(0);
   };
@@ -96,6 +108,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isConnected,
         unreadNotifications,
         incrementUnreadCount,
+        decrementUnreadCount,
+        setUnreadCount,
         resetUnreadCount,
       }}
     >

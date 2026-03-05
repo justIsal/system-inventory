@@ -20,6 +20,7 @@ import {
 import { DashboardLayout, type SidebarMenuGroup } from '@/components/templates/DashboardLayout';
 import { ThemeProvider } from '@/contexts/ThemeProvider';
 import { useTheme } from '@/contexts/themeHooks';
+import { SocketProvider } from '@/contexts/SocketContext';
 
 export const Route = createFileRoute('/admin/_layout')({
   beforeLoad: async () => {
@@ -130,9 +131,11 @@ function AdminLayout() {
   };
 
   return (
-    <ThemeProvider>
-      <AdminLayoutWithTheme sidebarMenu={SIDEBAR_MENU} handleLogout={handleLogout} />
-    </ThemeProvider>
+    <SocketProvider>
+      <ThemeProvider>
+        <AdminLayoutWithTheme sidebarMenu={SIDEBAR_MENU} handleLogout={handleLogout} />
+      </ThemeProvider>
+    </SocketProvider>
   );
 }
 
