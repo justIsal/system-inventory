@@ -36,6 +36,7 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
 // Response interceptor to handle 401 Unauthorized (Token Expiry)
 apiClient.interceptors.response.use(
+  (response) => response,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async (error: any) => {
     const originalRequest = error.config;
