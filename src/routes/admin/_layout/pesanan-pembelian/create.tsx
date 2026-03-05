@@ -143,7 +143,7 @@ function CreatePurchaseOrderPage() {
   // -- Submission --
   const validateForm = () => {
     if (!supplierId || supplierId === 0) return 'Silakan pilih Supplier.';
-    // if (!warehouseId || warehouseId === 0) return 'Silakan pilih Gudang Tujuan.'; (Warehouse logic not strictly required by DB yet for PO creation, but good for UI)
+    if (!warehouseId || warehouseId === 0) return 'Silakan pilih Gudang Tujuan.';
 
     const hasEmptyVariant = items.some((i) => i.variant_id === 0);
     if (hasEmptyVariant) return 'Ada baris produk yang belum dipilih.';
