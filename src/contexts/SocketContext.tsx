@@ -60,24 +60,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const newChannel = supabase
       .channel(`user-${userId}-notifications`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-        },
-        (payload) => {
-          console.log('Realtime Notification Received via Supabase RLS:', payload);
-          // 1. Convert PostgreSQL Payload to match expected app model
-          const notif = payload.new;
-          // 2. Dispatch a Custom DOM Event to cross-communicate with Toast Notification UI
-          const event = new CustomEvent('supabase-notification', { detail: notif });
-          window.dispatchEvent(event);
-          // 3. Increment our simple Context Bell visually
-          setUnreadNotifications((prev) => prev + 1);
-        },
-      )
+      // Listen solely to explicit backend API broadcasts since Custom JWT breaks Postgres replication RLS
       .on('broadcast', { event: 'supabase-notification' }, (payload) => {
         console.log('📡 RAW BROADCAST RECEIVED:', payload);
         const notif = payload.payload;
